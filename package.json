@@ -1,0 +1,17 @@
+{
+  "name": "xylo",
+  "version": "1.0.0",
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "nodemon server.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+  },
+  "dependencies": {
+    "autobind-decorator": "^2.4.0",
+    "express": "^4.16.2",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.0"
+  }
+}
