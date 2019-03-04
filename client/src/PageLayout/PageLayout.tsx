@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import LogFile from "./LogFile";
 import Welcome from "./Welcome";
 
 interface State {
@@ -9,10 +10,7 @@ interface State {
 export default class PageLayout extends React.Component<{}, State> {
   constructor(state: State) {
     super(state);
-
-    this.state = {
-      introduction: true
-    };
+    this.state = { introduction: true };
   }
 
   public startExperiment = () => {
@@ -25,7 +23,10 @@ export default class PageLayout extends React.Component<{}, State> {
     return introduction ? (
       <Welcome onStartButtonClick={this.startExperiment} />
     ) : (
-      <div>Actual page</div>
+      <>
+        <div>Actual page</div>
+        <LogFile />
+      </>
     );
   }
 }
