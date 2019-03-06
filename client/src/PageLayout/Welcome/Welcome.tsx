@@ -1,6 +1,8 @@
 import * as React from "react";
 
-import { Button } from "@shopify/polaris";
+import { Button, Card, DisplayText } from "@shopify/polaris";
+
+import "./Welcome.scss";
 
 interface Props {
   onStartButtonClick(): void;
@@ -11,12 +13,18 @@ export default class Welcome extends React.Component<Props> {
     const { onStartButtonClick } = this.props;
 
     return (
-      <>
-        <div>This is a welcome intro to the app</div>
-        <Button onClick={onStartButtonClick}>
-          Click me to start experiment
-        </Button>
-      </>
+      <div className="CenterCard">
+        <Card>
+          <div className="CenterElements">
+            <div className="Title">
+              <DisplayText size="medium">Welcome to Xylo</DisplayText>
+            </div>
+            <div>
+              <Button primary onClick={onStartButtonClick}>Let's begin</Button>
+            </div>
+          </div>
+        </Card>
+      </div>
     );
   }
 }
