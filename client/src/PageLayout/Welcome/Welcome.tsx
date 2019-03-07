@@ -37,7 +37,7 @@ export default class Welcome extends React.Component<Props, State> {
     const { onStartButtonClick } = this.props;
     const { beginUserIntro, userName, userAge } = this.state;
 
-    const uid = userName.charAt(0) + userAge + getRandomInt(100);
+    const uid = userName.charAt(0) + userAge + "-" + getRandomInt(100);
 
     const welcomeMarkup = (
       <div className="CenterElements">
