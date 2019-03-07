@@ -5,16 +5,17 @@ import Welcome from "./Welcome";
 
 interface State {
   introduction: boolean;
+  uid: string;
 }
 
 export default class PageLayout extends React.Component<{}, State> {
   constructor(state: State) {
     super(state);
-    this.state = { introduction: true };
+    this.state = { introduction: true, uid: "" };
   }
 
-  public startExperiment = () => {
-    this.setState({ introduction: false });
+  public startExperiment = (uid: string) => {
+    this.setState({ introduction: false, uid });
   };
 
   public render() {

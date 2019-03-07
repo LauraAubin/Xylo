@@ -7,3 +7,7 @@ export async function fetchRequest(type: string, path: string, body: {}) {
     method: type.toUpperCase()
   });
 }
+
+export function getRandomInt(max: number) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
