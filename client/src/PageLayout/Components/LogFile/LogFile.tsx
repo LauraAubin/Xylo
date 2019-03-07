@@ -3,7 +3,7 @@ import * as React from "react";
 import autobind from "autobind-decorator";
 
 import { Button } from "@shopify/polaris";
-import { fetchRequest } from "../../Utilities/Utilities";
+import { fetchRequest } from "../../../Utilities/Utilities";
 
 interface State {
   logFile: string;

@@ -1,7 +1,8 @@
 import * as React from "react";
 
-import LogFile from "./LogFile";
-import Welcome from "./Welcome";
+import LogFile from "./components/LogFile";
+import Welcome from "./components/Welcome";
+import PasswordWalkthrough from "./components/PasswordWalkthrough";
 
 interface State {
   introduction: boolean;
@@ -25,7 +26,7 @@ export default class PageLayout extends React.Component<{}, State> {
       <Welcome onStartButtonClick={this.startExperiment} />
     ) : (
       <>
-        <div>Actual page</div>
+        <PasswordWalkthrough />
         <LogFile />
       </>
     );

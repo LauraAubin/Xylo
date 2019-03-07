@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Button, Card, DisplayText, Stack, TextField } from "@shopify/polaris";
-import { getRandomInt } from "../../Utilities/Utilities";
+import { getRandomInt } from "../../../Utilities/Utilities";
 
 import "./Welcome.scss";
 
