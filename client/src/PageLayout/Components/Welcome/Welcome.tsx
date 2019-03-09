@@ -1,6 +1,13 @@
 import * as React from "react";
 
-import { Button, Card, DisplayText, Stack, TextField } from "@shopify/polaris";
+import {
+  Button,
+  Card,
+  DisplayText,
+  Stack,
+  TextContainer,
+  TextField
+} from "@shopify/polaris";
 import { getRandomInt } from "../../../Utilities/Utilities";
 
 import "./Welcome.scss";
@@ -10,7 +17,7 @@ interface Props {
 }
 
 interface State {
-  beginUserIntro: boolean;
+  pages: React.ReactNode[];
   userName: string;
   userAge: string;
 }
@@ -18,24 +25,16 @@ interface State {
 export default class Welcome extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { beginUserIntro: false, userName: "", userAge: "20" };
+    this.state = {
+      pages: [],
+      userName: "",
+      userAge: "20"
+    };
   }
 
-  public startUserIntro = () => {
-    this.setState({ beginUserIntro: true });
-  };
-
-  handleUserNameChange = (value: string) => {
-    this.setState({ userName: value });
-  };
-
-  handleUserAgeChange = (value: string) => {
-    this.setState({ userAge: value });
-  };
-
-  public render() {
+  componentDidMount() {
     const { onStartButtonClick } = this.props;
-    const { beginUserIntro, userName, userAge } = this.state;
+    const { pages, userName, userAge } = this.state;
 
     const uid = userName.charAt(0) + userAge + "-" + getRandomInt(100);
 
@@ -45,10 +44,29 @@ export default class Welcome extends React.Component<Props, State> {
           <DisplayText size="medium">Welcome to Xylo</DisplayText>
         </div>
         <div>
-          <Button primary onClick={this.startUserIntro}>
+          <Button primary onClick={this.nextPage}>
             Let's begin
           </Button>
         </div>
+      </div>
+    );
+
+    const instructionsMarkup = (
+      <div className="CenterElements">
+        <TextContainer>
+          <DisplayText size="small">Instructions</DisplayText>
+          <div>
+            The point of this app is to test your ability to remember passwords.
+          </div>
+          <div>
+            First you'll be assigned 3 different passwords, in which you'll have
+            the opportunity to practice before moving forward.
+          </div>
+          <div>Next you'll have to recreate them in a random order.</div>
+          <Button primary onClick={this.nextPage}>
+            I understand
+          </Button>
+        </TextContainer>
       </div>
     );
 
@@ -80,9 +98,33 @@ export default class Welcome extends React.Component<Props, State> {
       </div>
     );
 
+    pages.push(welcomeMarkup, instructionsMarkup, userIntro);
+
+    this.setState({ pages });
+  }
+
+  public nextPage = () => {
+    const { pages } = this.state;
+
+    pages.shift();
+
+    this.setState({ pages });
+  };
+
+  handleUserNameChange = (value: string) => {
+    this.setState({ userName: value });
+  };
+
+  handleUserAgeChange = (value: string) => {
+    this.setState({ userAge: value });
+  };
+
+  public render() {
+    const { pages } = this.state;
+
     return (
       <div className="CenterElement">
-        <Card>{beginUserIntro ? userIntro : welcomeMarkup}</Card>
+        <Card>{pages[0]}</Card>
       </div>
     );
   }
