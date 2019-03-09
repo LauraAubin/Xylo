@@ -9,6 +9,7 @@ Xylo is a tool to explore how people remember passwords using sound and color. T
 **Initial setup**
 
 - Clone the repo.
+- Make sure that your Node version is greater than 11. You can check this with `node -v` and upgrade with `brew upgrade node`.
 - From the base folder run `npm install` to create node_modules.
 - Navigate to the `/client` folder and run `npm install` here as well.
 
