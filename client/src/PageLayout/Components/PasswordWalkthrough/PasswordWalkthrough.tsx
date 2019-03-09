@@ -1,6 +1,8 @@
 import * as React from "react";
 
-import { Button, Modal } from "@shopify/polaris";
+import { Button, Card, Modal } from "@shopify/polaris";
+
+import "./PssswordWalkthrough.scss";
 
 interface State {
   passwordCreationModal: boolean;
@@ -34,20 +36,23 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
           onAction: this.handlePasswordCreationModal
         }}
       >
-        <Modal.Section>Here you will be assigned a password and get to practice it</Modal.Section>
+        <Modal.Section>
+          Here you will be assigned a password and get to practice it
+        </Modal.Section>
       </Modal>
     );
 
     return (
-      <>
-        <div>
-          Here I walk you through creating and remembering your password
-        </div>
-        <Button onClick={this.handlePasswordCreationModal}>
-          Create password
-        </Button>
-        {passwordCreationModalMarkup}
-      </>
+      <div className="CenterElement">
+        <Card title="Create passwords">
+          <div className="CardElements">
+            <Button onClick={this.handlePasswordCreationModal}>
+              Create password
+            </Button>
+            {passwordCreationModalMarkup}
+          </div>
+        </Card>
+      </div>
     );
   }
 }

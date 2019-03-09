@@ -81,7 +81,7 @@ export default class Welcome extends React.Component<Props, State> {
     );
 
     return (
-      <div className="CenterCard">
+      <div className="CenterElement">
         <Card>{beginUserIntro ? userIntro : welcomeMarkup}</Card>
       </div>
     );

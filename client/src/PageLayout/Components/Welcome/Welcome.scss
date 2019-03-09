@@ -1,15 +1,5 @@
 @import "../../../GlobalStyles/spacing.scss";
-
-$large-spacing: 200px;
-
-.CenterCard {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: $large-spacing;
-  height: 100vh;
-}
+@import "../../../GlobalStyles/alignment.scss";
 
 .CenterElements {
   display: flex;
