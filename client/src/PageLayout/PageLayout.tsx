@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import LogFile from "./components/LogFile";
 import Welcome from "./components/Welcome";
 import PasswordWalkthrough from "./components/PasswordWalkthrough";
 
@@ -25,10 +24,7 @@ export default class PageLayout extends React.Component<{}, State> {
     return introduction ? (
       <Welcome onStartButtonClick={this.startExperiment} />
     ) : (
-      <>
-        <PasswordWalkthrough />
-        <LogFile />
-      </>
+      <PasswordWalkthrough />
     );
   }
 }
