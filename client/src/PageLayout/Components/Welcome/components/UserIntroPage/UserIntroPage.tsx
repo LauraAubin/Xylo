@@ -3,7 +3,7 @@ import * as React from "react";
 import { Button, DisplayText, Stack, TextField } from "@shopify/polaris";
 import { getRandomInt } from "../../../../../Utilities/Utilities";
 
-import "../Welcome.scss";
+import "../../Welcome.scss";
 
 interface Props {
   userName: string;
