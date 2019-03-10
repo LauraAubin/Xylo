@@ -56,13 +56,14 @@ export default class Welcome extends React.Component<Props, State> {
         <TextContainer>
           <DisplayText size="small">Instructions</DisplayText>
           <div>
-            The point of this app is to test your ability to remember passwords.
+            The purpose of this app is to test your ability to remember
+            passwords.
           </div>
           <div>
-            First you'll be assigned 3 different passwords, in which you'll have
+            First you'll be assigned 3 different passwords, which you'll have
             the opportunity to practice before moving forward.
           </div>
-          <div>Next you'll have to recreate them in a random order.</div>
+          <div>Next, you'll have to recite them in a random order.</div>
           <Button primary onClick={this.nextPage}>
             I understand
           </Button>
@@ -85,7 +86,7 @@ export default class Welcome extends React.Component<Props, State> {
               onChange={this.handleUserNameChange}
             />
             <TextField
-              label="How old you are?"
+              label="How old are you?"
               type="number"
               value={userAge}
               onChange={this.handleUserAgeChange}
