@@ -1,0 +1,22 @@
+@import "../../../../GlobalStyles/colors.scss";
+@import "../../../../GlobalStyles/spacing.scss";
+
+.Key {
+  width: 50px;
+  height: 200px;
+  border-radius: spacing(tight);
+
+  @each $colorName, $color in $colors {
+    // index(map, (key, value))
+    $index: index($colors, $colorName $color);
+
+    &-#{$index} {
+      background-color: color($colorName);
+      box-shadow: 3px 3px color($colorName, dark);
+
+      &:active {
+        background-color: color($colorName, darker);
+      }
+    }
+  }
+}
