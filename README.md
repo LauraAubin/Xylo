@@ -2,7 +2,7 @@
 
 ## Description
 
-Xylo is a tool to explore how people remember passwords using sound and color. This project is meant for COMP 3008 at Carleton University.
+Xylo is a tool to explore how people remember passwords using sound and color. This project is meant for COMP 3008 Human Computer Interaction at Carleton University.
 
 ## Development
 
