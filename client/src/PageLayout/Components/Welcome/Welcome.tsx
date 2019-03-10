@@ -1,14 +1,10 @@
 import * as React from "react";
 
-import {
-  Button,
-  Card,
-  DisplayText,
-  Stack,
-  TextContainer,
-  TextField
-} from "@shopify/polaris";
-import { getRandomInt } from "../../../Utilities/Utilities";
+import { Card } from "@shopify/polaris";
+
+import WelcomePage from "./components/WelcomePage";
+import InstuctionsPage from "./components/InstructionsPage";
+import UserIntroPage from "./components/UserIntroPage";
 
 import "./Welcome.scss";
 
@@ -36,70 +32,17 @@ export default class Welcome extends React.Component<Props, State> {
     const { onStartButtonClick } = this.props;
     const { pages, userName, userAge } = this.state;
 
-    const uid = userName.charAt(0) + userAge + "-" + getRandomInt(100);
-
-    const welcomeMarkup = (
-      <div className="CenterElements">
-        <div className="Title">
-          <DisplayText size="medium">Welcome to Xylo</DisplayText>
-        </div>
-        <div>
-          <Button primary onClick={this.nextPage}>
-            Let's begin
-          </Button>
-        </div>
-      </div>
+    pages.push(
+      <WelcomePage nextPage={this.nextPage} />,
+      <InstuctionsPage nextPage={this.nextPage} />,
+      <UserIntroPage
+        userName={userName}
+        userAge={userAge}
+        handleUserNameChange={this.handleUserNameChange}
+        handleUserAgeChange={this.handleUserAgeChange}
+        onStartButtonClick={onStartButtonClick}
+      />
     );
-
-    const instructionsMarkup = (
-      <div className="CenterElements">
-        <TextContainer>
-          <DisplayText size="small">Instructions</DisplayText>
-          <div>
-            The purpose of this app is to test your ability to remember
-            passwords.
-          </div>
-          <div>
-            First you'll be assigned 3 different passwords, which you'll have
-            the opportunity to practice before moving forward.
-          </div>
-          <div>Next, you'll have to recite them in a random order.</div>
-          <Button primary onClick={this.nextPage}>
-            I understand
-          </Button>
-        </TextContainer>
-      </div>
-    );
-
-    const userIntro = (
-      <div className="CenterElements">
-        <div className="Title">
-          <DisplayText size="medium">
-            Tell me a little about yourself
-          </DisplayText>
-        </div>
-        <div className="FullWidth">
-          <Stack vertical spacing="loose">
-            <TextField
-              label="What's your name?"
-              value={userName}
-              onChange={this.handleUserNameChange}
-            />
-            <TextField
-              label="How old are you?"
-              type="number"
-              value={userAge}
-              onChange={this.handleUserAgeChange}
-            />
-            <Button primary onClick={onStartButtonClick.bind(this, uid)}>
-              Get started
-            </Button>
-          </Stack>
-        </div>
-      </div>
-    );
-
-    pages.push(welcomeMarkup, instructionsMarkup, userIntro);
 
     this.setState({ pages });
   }
@@ -123,9 +66,11 @@ export default class Welcome extends React.Component<Props, State> {
   public render() {
     const { pages } = this.state;
 
+    const firstPage = 0;
+
     return (
       <div className="CenterElement">
-        <Card>{pages[0]}</Card>
+        <Card>{pages[firstPage]}</Card>
       </div>
     );
   }
