@@ -1,0 +1,31 @@
+@import "../../../../GlobalStyles/colors.scss";
+@import "../../../../GlobalStyles/spacing.scss";
+
+.Key {
+  display: flex;
+  width: 50px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: spacing(tight) 0;
+  border-radius: spacing(tight);
+  margin: spacing(extraTight);
+
+  @each $colorName, $color in $colors {
+    // index(map, (key, value))
+    $index: index($colors, $colorName $color);
+
+    &-#{$index} {
+      $large-key-height: 250;
+      $key-height: $large-key-height - ($index * 10);
+
+      height: #{$key-height}px;
+      background-color: color($colorName);
+      box-shadow: 3px 3px color($colorName, dark);
+
+      &:active {
+        background-color: color($colorName, darker);
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Button, DisplayText } from "@shopify/polaris";
 
-import "../Welcome.scss";
+import "../../Welcome.scss";
 
 interface Props {
   nextPage(): void;
