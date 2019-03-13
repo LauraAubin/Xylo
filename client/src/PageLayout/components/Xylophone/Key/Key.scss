@@ -2,7 +2,12 @@
 @import "../../../../GlobalStyles/spacing.scss";
 
 .Key {
+  display: flex;
   width: 50px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: spacing(tight) 0;
   border-radius: spacing(tight);
   margin: spacing(extraTight);
 
