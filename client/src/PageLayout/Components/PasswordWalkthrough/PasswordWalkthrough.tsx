@@ -31,10 +31,12 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
 
     const passwordCreationModalMarkup = (
       <Modal
+        large
+        title="Try to remember the following password"
         open={passwordCreationModal}
         onClose={this.handlePasswordCreationModal}
         primaryAction={{
-          content: "Close",
+          content: "Got it",
           onAction: this.handlePasswordCreationModal
         }}
       >
