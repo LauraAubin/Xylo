@@ -1,5 +1,5 @@
-@import "../../../../GlobalStyles/colors.scss";
-@import "../../../../GlobalStyles/spacing.scss";
+@import "../../../../../../GlobalStyles/colors.scss";
+@import "../../../../../../GlobalStyles/spacing.scss";
 
 .Key {
   @each $colorName, $color in $colors {

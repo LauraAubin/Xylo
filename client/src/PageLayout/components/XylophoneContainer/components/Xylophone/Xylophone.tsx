@@ -1,7 +1,5 @@
 import * as React from "react";
 
-import { Button } from "@shopify/polaris";
-
 import autobind from "autobind-decorator";
 import Key from "./Key";
 
@@ -10,6 +8,7 @@ import "./Xylophone.scss";
 interface Props {
   numberOfKeys: number;
   generatedPassword: number[];
+  repeatPasswordVisualization?: number;
 }
 
 interface State {
@@ -30,13 +29,16 @@ export default class Xylophone extends React.Component<Props, State> {
     this.state = { animationIterator: 0, intervalInstance: undefined };
   }
 
+  componentDidUpdate(prevProps: Props) {
+    const { repeatPasswordVisualization } = this.props;
+
+    if (prevProps.repeatPasswordVisualization !== repeatPasswordVisualization) {
+      this.visualizePassword();
+    }
+  }
+
   public render() {
-    return (
-      <>
-        <Button onClick={this.visualizePassword}>Play password</Button>
-        <div className="KeysContainer">{this.renderKeys()}</div>
-      </>
-    );
+    return <div className="KeysContainer">{this.renderKeys()}</div>;
   }
 
   private renderKeys() {
