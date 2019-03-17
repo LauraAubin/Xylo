@@ -19,6 +19,11 @@ interface State {
 
 const PULSE_DURATION = 1500;
 
+enum AnimationActions {
+  Add,
+  Remove
+}
+
 export default class Xylophone extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -64,13 +69,10 @@ export default class Xylophone extends React.Component<Props, State> {
   }
 
   private animateNextKey() {
-    const { generatedPassword } = this.props;
     const { animationIterator } = this.state;
 
-    const specificKeyValue = generatedPassword[animationIterator];
-
-    this.addPulse(specificKeyValue);
-    this.removePulse(specificKeyValue);
+    this.addKeyAnimations();
+    this.removeKeyAnimations();
 
     this.setState({ animationIterator: animationIterator + 1 });
 
@@ -91,28 +93,65 @@ export default class Xylophone extends React.Component<Props, State> {
     }
   }
 
+  private addKeyAnimations() {
+    const { generatedPassword } = this.props;
+    const { animationIterator } = this.state;
+
+    const specificKeyValue = generatedPassword[animationIterator];
+
+    this.pulse(AnimationActions.Add, specificKeyValue);
+    this.darkenKey(AnimationActions.Add, specificKeyValue, true);
+  }
+
+  private removeKeyAnimations() {
+    const { generatedPassword } = this.props;
+    const { animationIterator } = this.state;
+
+    const specificKeyValue = generatedPassword[animationIterator];
+
+    this.pulse(AnimationActions.Remove, specificKeyValue);
+    this.darkenKey(AnimationActions.Remove, specificKeyValue);
+  }
+
   private findKey(identifier: number, type: string) {
     return document.getElementById(`${type}-${identifier}`);
   }
 
-  private addPulse(keyValue: number) {
+  private pulse(action: AnimationActions, keyValue: number) {
     const foundKeyContainer = this.findKey(keyValue, "keyContainer");
-    const foundKey = this.findKey(keyValue, "key");
 
-    foundKeyContainer && foundKeyContainer.classList.add("KeyPulse");
+    if (foundKeyContainer) {
+      const removeKeyPulseWithDelay = setTimeout(function() {
+        foundKeyContainer.classList.remove("KeyPulse");
+      }, PULSE_DURATION);
 
-    setTimeout(function() {
-      foundKey && foundKey.classList.add(`Key-${keyValue}-Active`);
-    }, 100);
+      action === AnimationActions.Add
+        ? foundKeyContainer.classList.add("KeyPulse")
+        : removeKeyPulseWithDelay;
+    }
   }
 
-  private removePulse(keyValue: number) {
-    const foundKeyContainer = this.findKey(keyValue, "keyContainer");
+  private darkenKey(
+    action: AnimationActions,
+    keyValue: number,
+    withAnimationDelay: boolean = false
+  ) {
     const foundKey = this.findKey(keyValue, "key");
 
-    setTimeout(function() {
-      foundKeyContainer && foundKeyContainer.classList.remove("KeyPulse");
-      foundKey && foundKey.classList.remove(`Key-${keyValue}-Active`);
-    }, PULSE_DURATION);
+    if (foundKey) {
+      const hasAnimationDelay = withAnimationDelay ? 100 : 0;
+      const removeFastThanAnimation = PULSE_DURATION - 500;
+
+      const delay =
+        action === AnimationActions.Add
+          ? hasAnimationDelay
+          : removeFastThanAnimation;
+
+      setTimeout(function() {
+        action === AnimationActions.Add
+          ? foundKey.classList.add(`Key-${keyValue}-Active`)
+          : foundKey.classList.remove(`Key-${keyValue}-Active`);
+      }, delay);
+    }
   }
 }
