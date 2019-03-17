@@ -2,6 +2,8 @@ import * as React from "react";
 
 import { Button, Card, Modal } from "@shopify/polaris";
 
+import PasswordCreation from "./components/PasswordCreation";
+
 import "./PssswordWalkthrough.scss";
 
 interface State {
@@ -29,15 +31,17 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
 
     const passwordCreationModalMarkup = (
       <Modal
+        large
+        title="Try to remember the following password"
         open={passwordCreationModal}
         onClose={this.handlePasswordCreationModal}
         primaryAction={{
-          content: "Close",
+          content: "Got it",
           onAction: this.handlePasswordCreationModal
         }}
       >
         <Modal.Section>
-          Here you will be assigned a password and get to practice it
+          <PasswordCreation />
         </Modal.Section>
       </Modal>
     );

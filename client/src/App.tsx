@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import PageLayout from "./PageLayout";
-
 import { AppProvider } from "@shopify/polaris";
+
+import PageLayout from "./PageLayout";
 
 class App extends React.Component {
   public render() {

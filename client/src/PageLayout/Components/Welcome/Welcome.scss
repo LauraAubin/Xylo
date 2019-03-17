@@ -10,10 +10,11 @@
   margin: spacing(loose);
 }
 
-.Title {
-  padding-bottom: spacing(loose);
+.CenterElement {
+  @include CenterElement;
+  height: 75vh;
 }
 
-.FullWidth {
-  width: 100%;
+.Title {
+  padding-bottom: spacing(loose);
 }

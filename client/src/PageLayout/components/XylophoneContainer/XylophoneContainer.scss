@@ -1,0 +1,5 @@
+@import "../../../GlobalStyles/alignment.scss";
+
+.Center {
+  @include CenterElement;
+}
