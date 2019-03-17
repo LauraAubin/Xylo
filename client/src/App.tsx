@@ -1,8 +1,10 @@
 import * as React from "react";
 
+import { AppProvider } from "@shopify/polaris";
+
 import PageLayout from "./PageLayout";
 
-import { AppProvider } from "@shopify/polaris";
+import "./GlobalStyles/OverridePolaris.scss";
 
 class App extends React.Component {
   public render() {
