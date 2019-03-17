@@ -1,9 +1,8 @@
-.CenterElement {
+@mixin CenterElement {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 75vh;
 }
 
 .FullWidth {

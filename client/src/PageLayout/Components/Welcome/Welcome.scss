@@ -10,6 +10,11 @@
   margin: spacing(loose);
 }
 
+.CenterElement {
+  @include CenterElement;
+  height: 75vh;
+}
+
 .Title {
   padding-bottom: spacing(loose);
 }
