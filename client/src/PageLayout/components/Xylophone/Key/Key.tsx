@@ -13,7 +13,7 @@ export default class Key extends React.Component<Props> {
     const { identifier } = this.props;
 
     return (
-      <div className={`Key Key-${identifier}`}>
+      <div className={`Key-${identifier}`} id={`key-${identifier}`}>
         <Screw />
         <Screw />
       </div>
