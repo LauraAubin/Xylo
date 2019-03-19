@@ -2,13 +2,16 @@ import * as React from "react";
 
 import { Button, Card, Modal } from "@shopify/polaris";
 
-import PasswordCreation from "./components/PasswordCreation";
+import XylophoneContainer from "../XylophoneContainer";
 
 import "./PssswordWalkthrough.scss";
 
+const PASSWORD_OPTIONS = 12;
+const PASSWORD_LENGTH = 6;
+
 interface State {
   passwordCreationModal: boolean;
-  createdPasswords: { "type 1": string; "type 2": string; "type 3": string };
+  createdPasswords: { first: number[]; second: number[]; third: number[] };
 }
 
 export default class PasswordWalkthrough extends React.Component<{}, State> {
@@ -16,8 +19,18 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
     super(state);
     this.state = {
       passwordCreationModal: false,
-      createdPasswords: { "type 1": "", "type 2": "", "type 3": "" }
+      createdPasswords: { first: [], second: [], third: [] }
     };
+  }
+
+  componentDidMount() {
+    this.setState({
+      createdPasswords: {
+        first: this.generatePassword(),
+        second: this.generatePassword(),
+        third: this.generatePassword()
+      }
+    });
   }
 
   handlePasswordCreationModal = () => {
@@ -27,7 +40,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
   };
 
   public render() {
-    const { passwordCreationModal } = this.state;
+    const { passwordCreationModal, createdPasswords } = this.state;
 
     const passwordCreationModalMarkup = (
       <Modal
@@ -41,7 +54,10 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
         }}
       >
         <Modal.Section>
-          <PasswordCreation />
+          <XylophoneContainer
+            numberOfKeys={PASSWORD_OPTIONS}
+            generatedPassword={createdPasswords.first}
+          />
         </Modal.Section>
       </Modal>
     );
@@ -57,6 +73,12 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
           </div>
         </Card>
       </div>
+    );
+  }
+
+  private generatePassword() {
+    return Array.from({ length: PASSWORD_LENGTH }, () =>
+      Math.ceil(Math.random() * PASSWORD_OPTIONS)
     );
   }
 }
