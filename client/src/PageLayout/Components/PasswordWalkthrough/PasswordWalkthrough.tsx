@@ -1,75 +1,58 @@
 import * as React from "react";
 
-import { Button, Card, Modal } from "@shopify/polaris";
+import autobind from "autobind-decorator";
+import PasswordCreation from "./components/PasswordCreation";
 
-import XylophoneContainer from "../XylophoneContainer";
+import { Card } from "@shopify/polaris";
 
 import "./PssswordWalkthrough.scss";
 
 const PASSWORD_OPTIONS = 12;
 const PASSWORD_LENGTH = 6;
+const NUMBER_OF_PASSWORDS = 3;
 
 interface State {
-  passwordCreationModal: boolean;
-  createdPasswords: { first: number[]; second: number[]; third: number[] };
+  showPasswordCreationModal: boolean;
+  createdPasswords: number[][];
+  step: number;
 }
 
 export default class PasswordWalkthrough extends React.Component<{}, State> {
   constructor(state: State) {
     super(state);
     this.state = {
-      passwordCreationModal: false,
-      createdPasswords: { first: [], second: [], third: [] }
+      showPasswordCreationModal: false,
+      createdPasswords: [],
+      step: 0
     };
   }
 
   componentDidMount() {
     this.setState({
-      createdPasswords: {
-        first: this.generatePassword(),
-        second: this.generatePassword(),
-        third: this.generatePassword()
-      }
+      createdPasswords: this.createThreePasswords()
     });
   }
 
-  handlePasswordCreationModal = () => {
-    const { passwordCreationModal } = this.state;
-
-    this.setState({ passwordCreationModal: !passwordCreationModal });
-  };
-
   public render() {
-    const { passwordCreationModal, createdPasswords } = this.state;
+    const { showPasswordCreationModal, createdPasswords, step } = this.state;
 
-    const passwordCreationModalMarkup = (
-      <Modal
-        large
-        title="Try to remember the following password"
-        open={passwordCreationModal}
-        onClose={this.handlePasswordCreationModal}
-        primaryAction={{
-          content: "Got it",
-          onAction: this.handlePasswordCreationModal
-        }}
-      >
-        <Modal.Section>
-          <XylophoneContainer
-            numberOfKeys={PASSWORD_OPTIONS}
-            generatedPassword={createdPasswords.first}
-          />
-        </Modal.Section>
-      </Modal>
-    );
+    const flow = [
+      { action: createdPasswords[0], description: "Show first password" },
+      { action: createdPasswords[1], description: "Show second password" },
+      { action: createdPasswords[2], description: "Show third password" }
+    ];
 
     return (
       <div className="CenterElement">
         <Card title="Create passwords">
           <div className="CardElements">
-            <Button onClick={this.handlePasswordCreationModal}>
-              Create password
-            </Button>
-            {passwordCreationModalMarkup}
+            <PasswordCreation
+              showPasswordCreationModal={showPasswordCreationModal}
+              passwordOptions={PASSWORD_OPTIONS}
+              generatedPassword={flow[step].action}
+              closeModal={this.closeModal}
+              handlePasswordCreationModal={this.handlePasswordCreationModal}
+            />
           </div>
         </Card>
       </div>
@@ -80,5 +63,26 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
     return Array.from({ length: PASSWORD_LENGTH }, () =>
       Math.ceil(Math.random() * PASSWORD_OPTIONS)
     );
+  }
+
+  private createThreePasswords() {
+    return Array.from({ length: NUMBER_OF_PASSWORDS }, () =>
+      this.generatePassword()
+    );
+  }
+
+  @autobind
+  private handlePasswordCreationModal() {
+    const { showPasswordCreationModal } = this.state;
+
+    this.setState({ showPasswordCreationModal: !showPasswordCreationModal });
+  }
+
+  @autobind
+  private closeModal() {
+    const { step } = this.state;
+
+    this.setState({ step: step + 1 });
+    this.handlePasswordCreationModal();
   }
 }
