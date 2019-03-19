@@ -1,4 +1,5 @@
 import * as React from "react";
+import moment from "moment";
 
 import { Button, DisplayText, Stack, TextField } from "@shopify/polaris";
 import { getRandomInt } from "../../../../../Utilities/Utilities";
@@ -23,7 +24,8 @@ export default class UserIntroPage extends React.Component<Props> {
       onStartButtonClick
     } = this.props;
 
-    const uid = userName.charAt(0) + userAge + "-" + getRandomInt(100);
+    const date = moment().format("M/D/YY");
+    const uid = date + "-" + getRandomInt(100);
 
     return (
       <div className="CenterElements">
