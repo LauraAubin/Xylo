@@ -42,17 +42,21 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
       { action: createdPasswords[2], description: "Show third password" }
     ];
 
+    const passwordCreationSteps = step < 3;
+
     return (
       <div className="CenterElement">
         <Card title="Create passwords">
           <div className="CardElements">
-            <PasswordCreation
-              showPasswordCreationModal={showPasswordCreationModal}
-              passwordOptions={PASSWORD_OPTIONS}
-              generatedPassword={flow[step].action}
-              closeModal={this.closeModal}
-              handlePasswordCreationModal={this.handlePasswordCreationModal}
-            />
+            {passwordCreationSteps && (
+              <PasswordCreation
+                showPasswordCreationModal={showPasswordCreationModal}
+                passwordOptions={PASSWORD_OPTIONS}
+                generatedPassword={flow[step].action}
+                closeModal={this.closeModal}
+                handlePasswordCreationModal={this.handlePasswordCreationModal}
+              />
+            )}
           </div>
         </Card>
       </div>
