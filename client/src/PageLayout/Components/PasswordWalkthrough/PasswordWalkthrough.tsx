@@ -15,6 +15,7 @@ const NUMBER_OF_PASSWORDS = 3;
 interface State {
   showPasswordCreationModal: boolean;
   createdPasswords: number[][];
+  shuffledPasswords: number[][];
   step: number;
 }
 
@@ -24,13 +25,15 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
     this.state = {
       showPasswordCreationModal: false,
       createdPasswords: [],
+      shuffledPasswords: [],
       step: 0
     };
   }
 
   componentDidMount() {
     this.setState({
-      createdPasswords: this.createThreePasswords()
+      createdPasswords: this.createThreePasswords(),
+      shuffledPasswords: this.createShuffledPasswords()
     });
   }
 
@@ -83,6 +86,12 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
     return Array.from({ length: NUMBER_OF_PASSWORDS }, () =>
       this.generatePassword()
     );
+  }
+
+  private createShuffledPasswords() {
+    const { createdPasswords } = this.state;
+
+    return createdPasswords.sort(() => Math.random() - 0.5);
   }
 
   @autobind
