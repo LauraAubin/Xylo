@@ -4,6 +4,7 @@ import autobind from "autobind-decorator";
 import PasswordCreation from "./components/PasswordCreation";
 
 import { Card } from "@shopify/polaris";
+import { flow } from "./flow";
 
 import "./PssswordWalkthrough.scss";
 
@@ -36,29 +37,38 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
   public render() {
     const { showPasswordCreationModal, createdPasswords, step } = this.state;
 
-    const flow = [
-      { action: createdPasswords[0], description: "Show first password" },
-      { action: createdPasswords[1], description: "Show second password" },
-      { action: createdPasswords[2], description: "Show third password" }
-    ];
+    const flowSteps = flow(createdPasswords);
+    const cardTitle = flowSteps[step].title;
+    const isCreatingPassword = flowSteps[step].action.isCreatingPassword;
 
-    const passwordCreationSteps = step < 3;
+    const endOfFlow = step >= flow.length;
+
+    const creatingPasswordMarkup = (
+      <Card title={cardTitle}>
+        <div className="CardElements">
+          {isCreatingPassword && (
+            <PasswordCreation
+              showPasswordCreationModal={showPasswordCreationModal}
+              passwordOptions={PASSWORD_OPTIONS}
+              generatedPassword={flowSteps[step].data}
+              closeModal={this.closeModal}
+              handlePasswordCreationModal={this.handlePasswordCreationModal}
+            />
+          )}
+        </div>
+      </Card>
+    );
+
+    const pageMarkup = !endOfFlow && creatingPasswordMarkup;
+
+    const emptyStateMarkup = endOfFlow && (
+      <div>Uh oh, something went wrong 🙁</div>
+    );
 
     return (
       <div className="CenterElement">
-        <Card title="Create passwords">
-          <div className="CardElements">
-            {passwordCreationSteps && (
-              <PasswordCreation
-                showPasswordCreationModal={showPasswordCreationModal}
-                passwordOptions={PASSWORD_OPTIONS}
-                generatedPassword={flow[step].action}
-                closeModal={this.closeModal}
-                handlePasswordCreationModal={this.handlePasswordCreationModal}
-              />
-            )}
-          </div>
-        </Card>
+        {pageMarkup}
+        {emptyStateMarkup}
       </div>
     );
   }
