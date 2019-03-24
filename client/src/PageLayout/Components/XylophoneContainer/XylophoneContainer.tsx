@@ -7,9 +7,15 @@ import Xylophone from "./components/Xylophone";
 
 import "./XylophoneContainer.scss";
 
+enum Type {
+  creation,
+  recall
+}
+
 interface Props {
+  type: Type.creation | Type.recall;
   numberOfKeys: number;
-  generatedPassword: number[];
+  password: number[];
 }
 
 interface State {
@@ -24,19 +30,21 @@ export default class XylophoneContainer extends React.Component<Props, State> {
   }
 
   public render() {
-    const { numberOfKeys, generatedPassword } = this.props;
+    const { numberOfKeys, password, type } = this.props;
     const { repeatPasswordVisualization } = this.state;
 
     return (
       <div className="Center">
         <Xylophone
           numberOfKeys={numberOfKeys}
-          generatedPassword={generatedPassword}
+          generatedPassword={password}
           repeatPasswordVisualization={repeatPasswordVisualization}
         />
-        <Button plain onClick={this.visualizePassword}>
-          Play password
-        </Button>
+        {type === Type.creation && (
+          <Button plain onClick={this.visualizePassword}>
+            Play password
+          </Button>
+        )}
       </div>
     );
   }
