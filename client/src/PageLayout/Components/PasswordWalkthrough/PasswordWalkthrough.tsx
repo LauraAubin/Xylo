@@ -4,6 +4,7 @@ import autobind from "autobind-decorator";
 import PasswordCreation from "./components/PasswordCreation";
 
 import { Card } from "@shopify/polaris";
+import {emptyArray} from "../../../Utilities/Utilities";
 import { flow } from "./flow";
 
 import "./PssswordWalkthrough.scss";
@@ -31,49 +32,53 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
   }
 
   componentDidMount() {
-    this.setState({
-      createdPasswords: this.createThreePasswords(),
-      shuffledPasswords: this.createShuffledPasswords()
-    });
+    this.setState({ createdPasswords: this.createThreePasswords() });
+  }
+
+  componentDidUpdate() {
+    const {createdPasswords, shuffledPasswords} = this.state;
+
+    if (!emptyArray(createdPasswords) && emptyArray(shuffledPasswords)) {
+      this.setState({ shuffledPasswords: this.createShuffledPasswords() });
+    }
   }
 
   public render() {
     const { showPasswordCreationModal, createdPasswords, step } = this.state;
 
     const flowSteps = flow(createdPasswords);
-    const cardTitle = flowSteps[step].title;
-    const isCreatingPassword = flowSteps[step].action.isCreatingPassword;
+    const endOfFlow = step >= flowSteps.length;
 
-    const endOfFlow = step >= flow.length;
-
-    const creatingPasswordMarkup = (
-      <Card title={cardTitle}>
-        <div className="CardElements">
-          {isCreatingPassword && (
-            <PasswordCreation
-              showPasswordCreationModal={showPasswordCreationModal}
-              passwordOptions={PASSWORD_OPTIONS}
-              generatedPassword={flowSteps[step].data}
-              closeModal={this.closeModal}
-              handlePasswordCreationModal={this.handlePasswordCreationModal}
-            />
-          )}
+    if (endOfFlow) {
+      const emptyStateMarkup = (
+        <div className="CenterElement">
+          <div>Uh oh, something went wrong 🙁</div>
         </div>
-      </Card>
-    );
+      );
 
-    const pageMarkup = !endOfFlow && creatingPasswordMarkup;
+      return emptyStateMarkup;
+    } else {
+      const cardTitle = flowSteps[step].title;
+      const isCreatingPassword = flowSteps[step].action.isCreatingPassword;
 
-    const emptyStateMarkup = endOfFlow && (
-      <div>Uh oh, something went wrong 🙁</div>
-    );
+      const createPasswordMarkup = (
+        <Card title={cardTitle}>
+          <div className="CardElements">
+            {isCreatingPassword && (
+              <PasswordCreation
+                showPasswordCreationModal={showPasswordCreationModal}
+                passwordOptions={PASSWORD_OPTIONS}
+                generatedPassword={flowSteps[step].data}
+                closeModal={this.closeModal}
+                handlePasswordCreationModal={this.handlePasswordCreationModal}
+              />
+            )}
+          </div>
+        </Card>
+      );
 
-    return (
-      <div className="CenterElement">
-        {pageMarkup}
-        {emptyStateMarkup}
-      </div>
-    );
+      return <div className="CenterElement">{createPasswordMarkup}</div>;
+    }
   }
 
   private generatePassword() {
