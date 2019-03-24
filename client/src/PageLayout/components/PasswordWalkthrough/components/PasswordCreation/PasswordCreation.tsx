@@ -32,7 +32,7 @@ export default class PasswordCreation extends React.Component<Props> {
         large
         title="Try to remember the following password"
         open={showModal}
-        onClose={closeModal}
+        onClose={handleModal}
         primaryAction={{
           content: "Got it",
           onAction: closeModal
