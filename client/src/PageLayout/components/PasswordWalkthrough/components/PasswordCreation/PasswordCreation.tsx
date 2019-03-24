@@ -9,7 +9,7 @@ interface Props {
   passwordOptions: number;
   generatedPassword: number[];
   closeModal(): void;
-  handlePasswordCreationModal(): void;
+  handleModal(): void;
 }
 
 export default class PasswordCreation extends React.Component<Props> {
@@ -19,7 +19,7 @@ export default class PasswordCreation extends React.Component<Props> {
       passwordOptions,
       generatedPassword,
       closeModal,
-      handlePasswordCreationModal
+      handleModal
     } = this.props;
 
     const passwordCreationModalMarkup = (
@@ -44,7 +44,7 @@ export default class PasswordCreation extends React.Component<Props> {
 
     return (
       <>
-        <Button onClick={handlePasswordCreationModal}>Create password</Button>
+        <Button onClick={handleModal}>Create password</Button>
         {passwordCreationModalMarkup}
       </>
     );

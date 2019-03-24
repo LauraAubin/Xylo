@@ -2,9 +2,10 @@ import * as React from "react";
 
 import autobind from "autobind-decorator";
 import PasswordCreation from "./components/PasswordCreation";
+import PasswordRecall from "./components/PasswordRecall";
 
 import { Card } from "@shopify/polaris";
-import {emptyArray} from "../../../Utilities/Utilities";
+import { emptyArray } from "../../../Utilities/Utilities";
 import { flow } from "./flow";
 
 import "./PssswordWalkthrough.scss";
@@ -14,7 +15,7 @@ const PASSWORD_LENGTH = 6;
 const NUMBER_OF_PASSWORDS = 3;
 
 interface State {
-  showPasswordCreationModal: boolean;
+  showModal: boolean;
   createdPasswords: number[][];
   shuffledPasswords: number[][];
   step: number;
@@ -24,7 +25,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
   constructor(state: State) {
     super(state);
     this.state = {
-      showPasswordCreationModal: false,
+      showModal: false,
       createdPasswords: [],
       shuffledPasswords: [],
       step: 0
@@ -36,7 +37,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
   }
 
   componentDidUpdate() {
-    const {createdPasswords, shuffledPasswords} = this.state;
+    const { createdPasswords, shuffledPasswords } = this.state;
 
     if (!emptyArray(createdPasswords) && emptyArray(shuffledPasswords)) {
       this.setState({ shuffledPasswords: this.createShuffledPasswords() });
@@ -44,9 +45,12 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
   }
 
   public render() {
-    const { showPasswordCreationModal, createdPasswords, step } = this.state;
+    const { showModal, createdPasswords, shuffledPasswords, step } = this.state;
 
-    const flowSteps = flow(createdPasswords);
+    const flowSteps = flow(
+      createdPasswords,
+      shuffledPasswords
+    );
     const endOfFlow = step >= flowSteps.length;
 
     if (endOfFlow) {
@@ -61,23 +65,24 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
       const cardTitle = flowSteps[step].title;
       const isCreatingPassword = flowSteps[step].action.isCreatingPassword;
 
-      const createPasswordMarkup = (
+      const passwordMarkup = (
         <Card title={cardTitle}>
           <div className="CardElements">
             {isCreatingPassword && (
               <PasswordCreation
-                showPasswordCreationModal={showPasswordCreationModal}
+                showPasswordCreationModal={showModal}
                 passwordOptions={PASSWORD_OPTIONS}
                 generatedPassword={flowSteps[step].data}
                 closeModal={this.closeModal}
-                handlePasswordCreationModal={this.handlePasswordCreationModal}
+                handleModal={this.handleModal}
               />
             )}
+            {!isCreatingPassword && <PasswordRecall />}
           </div>
         </Card>
       );
 
-      return <div className="CenterElement">{createPasswordMarkup}</div>;
+      return <div className="CenterElement">{passwordMarkup}</div>;
     }
   }
 
@@ -100,10 +105,10 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
   }
 
   @autobind
-  private handlePasswordCreationModal() {
-    const { showPasswordCreationModal } = this.state;
+  private handleModal() {
+    const { showModal } = this.state;
 
-    this.setState({ showPasswordCreationModal: !showPasswordCreationModal });
+    this.setState({ showModal: !showModal });
   }
 
   @autobind
@@ -111,6 +116,6 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
     const { step } = this.state;
 
     this.setState({ step: step + 1 });
-    this.handlePasswordCreationModal();
+    this.handleModal();
   }
 }
