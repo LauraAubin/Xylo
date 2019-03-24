@@ -4,29 +4,34 @@ import XylophoneContainer from "../../../XylophoneContainer";
 
 import { Button, Modal } from "@shopify/polaris";
 
+enum Type {
+  creation,
+  recall
+}
+
 interface Props {
-  showPasswordCreationModal: boolean;
+  showModal: boolean;
   passwordOptions: number;
   generatedPassword: number[];
   closeModal(): void;
-  handlePasswordCreationModal(): void;
+  handleModal(): void;
 }
 
 export default class PasswordCreation extends React.Component<Props> {
   public render() {
     const {
-      showPasswordCreationModal,
+      showModal,
       passwordOptions,
       generatedPassword,
       closeModal,
-      handlePasswordCreationModal
+      handleModal
     } = this.props;
 
-    const passwordCreationModalMarkup = (
+    const modalMarkup = (
       <Modal
         large
         title="Try to remember the following password"
-        open={showPasswordCreationModal}
+        open={showModal}
         onClose={closeModal}
         primaryAction={{
           content: "Got it",
@@ -35,8 +40,9 @@ export default class PasswordCreation extends React.Component<Props> {
       >
         <Modal.Section>
           <XylophoneContainer
+            type={Type.creation}
             numberOfKeys={passwordOptions}
-            generatedPassword={generatedPassword}
+            password={generatedPassword}
           />
         </Modal.Section>
       </Modal>
@@ -44,8 +50,8 @@ export default class PasswordCreation extends React.Component<Props> {
 
     return (
       <>
-        <Button onClick={handlePasswordCreationModal}>Create password</Button>
-        {passwordCreationModalMarkup}
+        <Button onClick={handleModal}>Create password</Button>
+        {modalMarkup}
       </>
     );
   }
