@@ -63,6 +63,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
       return emptyStateMarkup;
     } else {
       const cardTitle = flowSteps[step].title;
+      const data = flowSteps[step].data;
       const isCreatingPassword = flowSteps[step].action.isCreatingPassword;
 
       const passwordMarkup = (
@@ -70,14 +71,22 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
           <div className="CardElements">
             {isCreatingPassword && (
               <PasswordCreation
-                showPasswordCreationModal={showModal}
+                showModal={showModal}
                 passwordOptions={PASSWORD_OPTIONS}
-                generatedPassword={flowSteps[step].data}
+                generatedPassword={data}
                 closeModal={this.closeModal}
                 handleModal={this.handleModal}
               />
             )}
-            {!isCreatingPassword && <PasswordRecall />}
+            {!isCreatingPassword && (
+              <PasswordRecall
+                showModal={showModal}
+                passwordOptions={PASSWORD_OPTIONS}
+                password={data}
+                closeModal={this.closeModal}
+                handleModal={this.handleModal}
+              />
+            )}
           </div>
         </Card>
       );
