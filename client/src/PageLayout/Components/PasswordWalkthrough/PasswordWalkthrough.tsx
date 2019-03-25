@@ -76,6 +76,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
                 generatedPassword={data}
                 closeModal={this.closeModal}
                 handleModal={this.handleModal}
+                step={step}
               />
             )}
             {!isCreatingPassword && (
