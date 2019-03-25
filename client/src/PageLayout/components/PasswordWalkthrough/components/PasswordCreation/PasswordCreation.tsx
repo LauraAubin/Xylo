@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import Blue from "./CustomModalColors/Blue";
+import Teal from "./CustomModalColors/Teal";
 import XylophoneContainer from "../../../XylophoneContainer";
 
 import { Icon, Modal, Stack, TextStyle } from "@shopify/polaris";
@@ -54,7 +56,7 @@ export default class PasswordCreation extends React.Component<Props> {
 
     const pageMarkup = [
       { type: "Shopping", color: "blue", icon: "products" },
-      { type: "Home", color: "green", icon: "home" },
+      { type: "Home", color: "teal", icon: "home" },
       { type: "Phone", color: "red", icon: "notification" }
     ].map((item, index) => (
       <div className="StackElement">
@@ -89,10 +91,21 @@ export default class PasswordCreation extends React.Component<Props> {
       </div>
     ));
 
+    // const components = {
+    //   blue: Blue,
+    //   teal: Teal
+    // };
+
+    const foo = <Blue/>
+    const bar = <Teal/>
+
     return (
       <>
         {pageMarkup}
         {modalMarkup}
+
+        {/* <Blue /> */}
+        {React.createElement("Blue", {})}
       </>
     );
   }
