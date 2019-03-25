@@ -4,19 +4,19 @@ export function flow(
 ) {
   return [
     {
-      title: "Create a password",
+      title: "Create a password for",
       action: { isCreatingPassword: true },
       data: createdPasswords[0],
       description: "Show first password"
     },
     {
-      title: "Create a password",
+      title: "Create a password for",
       action: { isCreatingPassword: true },
       data: createdPasswords[1],
       description: "Show second password"
     },
     {
-      title: "Create a password",
+      title: "Create a password for",
       action: { isCreatingPassword: true },
       data: createdPasswords[2],
       description: "Show third password"
