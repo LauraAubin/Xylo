@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import autobind from "autobind-decorator";
 import XylophoneContainer from "../../../XylophoneContainer";
 
 import { Button, Icon, Modal, Stack, TextStyle } from "@shopify/polaris";
@@ -20,7 +21,16 @@ interface Props {
   handleModal(): void;
 }
 
-export default class PasswordCreation extends React.Component<Props> {
+interface State {
+  practiceMode: boolean;
+}
+
+export default class PasswordCreation extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { practiceMode: false };
+  }
+
   public render() {
     const {
       showModal,
@@ -31,8 +41,13 @@ export default class PasswordCreation extends React.Component<Props> {
       handleModal
     } = this.props;
 
+    const { practiceMode } = this.state;
+
     const modalFooter = (
       <div className="ModalFooterArea">
+        <div className="PracticeButton">
+          <Button onClick={this.practiceClicked}>Practice</Button>
+        </div>
         <Button primary onClick={closeModal}>
           Got it
         </Button>
@@ -52,6 +67,7 @@ export default class PasswordCreation extends React.Component<Props> {
             type={Type.creation}
             numberOfKeys={passwordOptions}
             password={generatedPassword}
+            practiceMode={practiceMode}
           />
         </Modal.Section>
       </Modal>
@@ -100,5 +116,10 @@ export default class PasswordCreation extends React.Component<Props> {
         {modalMarkup}
       </>
     );
+  }
+
+  @autobind
+  private practiceClicked() {
+    this.setState({ practiceMode: true });
   }
 }

@@ -16,6 +16,7 @@ interface Props {
   type: Type.creation | Type.recall;
   numberOfKeys: number;
   password: number[];
+  practiceMode?: boolean;
 }
 
 interface State {
@@ -30,7 +31,7 @@ export default class XylophoneContainer extends React.Component<Props, State> {
   }
 
   public render() {
-    const { numberOfKeys, password, type } = this.props;
+    const { numberOfKeys, password, type, practiceMode } = this.props;
     const { repeatPasswordVisualization } = this.state;
 
     return (
@@ -40,7 +41,7 @@ export default class XylophoneContainer extends React.Component<Props, State> {
           generatedPassword={password}
           repeatPasswordVisualization={repeatPasswordVisualization}
         />
-        {type === Type.creation && (
+        {type === Type.creation && !practiceMode && (
           <Button plain onClick={this.visualizePassword}>
             Play password
           </Button>
