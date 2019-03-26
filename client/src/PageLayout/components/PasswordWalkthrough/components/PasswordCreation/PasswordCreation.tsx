@@ -2,7 +2,7 @@ import * as React from "react";
 
 import XylophoneContainer from "../../../XylophoneContainer";
 
-import { Icon, Modal, Stack, TextStyle } from "@shopify/polaris";
+import { Button, Icon, Modal, Stack, TextStyle } from "@shopify/polaris";
 
 import "./PasswordCreation.scss";
 
@@ -31,16 +31,21 @@ export default class PasswordCreation extends React.Component<Props> {
       handleModal
     } = this.props;
 
+    const modalFooter = (
+      <div className="ModalFooterArea">
+        <Button primary onClick={closeModal}>
+          Got it
+        </Button>
+      </div>
+    );
+
     const modalMarkup = (
       <Modal
         large
         title="Try to remember the following password"
         open={showModal}
         onClose={handleModal}
-        primaryAction={{
-          content: "Got it",
-          onAction: closeModal
-        }}
+        footer={modalFooter}
       >
         <Modal.Section>
           <XylophoneContainer
