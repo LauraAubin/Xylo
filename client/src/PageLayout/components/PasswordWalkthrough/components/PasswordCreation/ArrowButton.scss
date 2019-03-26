@@ -1,0 +1,54 @@
+@import "../../../../../GlobalStyles/spacing.scss";
+@import "./colors.scss";
+
+$arrow-button-height: 30px;
+
+.ArrowButton {
+  list-style: none;
+  cursor: pointer;
+}
+
+.ArrowButton li,
+.ArrowButton a {
+  position: relative;
+  height: $arrow-button-height;
+  line-height: $arrow-button-height;
+  float: left;
+}
+
+.ArrowButton a {
+  padding: 0 spacing();
+  color: white;
+  text-decoration: none;
+  border-bottom-right-radius: spacing(extraTight);
+  border-top-right-radius: spacing(extraTight);
+  box-shadow: 2px 2px 5px grey;
+}
+
+@each $colorName, $color in $colors {
+  .ArrowButton--#{$colorName} a {
+    background: map-get($color, $colorName);
+
+    &:before {
+      border-color: transparent map-get($color, $colorName);
+
+      content: "";
+      float: left;
+      position: absolute;
+      left: -($arrow-button-height/2);
+      border-style: solid;
+      border-width: $arrow-button-height/2;
+      border-left-width: 0;
+    }
+
+    &:hover {
+      $specificColorVariations: map-get($colors, $colorName);
+
+      background: map-get($specificColorVariations, dark);
+
+      &:before {
+        border-color: transparent map-get($specificColorVariations, dark);
+      }
+    }
+  }
+}
