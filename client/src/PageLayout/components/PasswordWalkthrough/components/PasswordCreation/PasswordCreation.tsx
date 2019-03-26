@@ -54,7 +54,7 @@ export default class PasswordCreation extends React.Component<Props> {
 
     const pageMarkup = [
       { type: "Shopping", color: "blue", icon: "products" },
-      { type: "Home", color: "green", icon: "home" },
+      { type: "Home", color: "teal", icon: "home" },
       { type: "Phone", color: "red", icon: "notification" }
     ].map((item, index) => (
       <div className="StackElement">
@@ -78,7 +78,7 @@ export default class PasswordCreation extends React.Component<Props> {
           </Stack.Item>
           <Stack.Item>
             {index === step && (
-              <ul className="ArrowButton">
+              <ul className={`ArrowButton ArrowButton--${item.color}`}>
                 <li>
                   <a onClick={handleModal}>Create password</a>
                 </li>
