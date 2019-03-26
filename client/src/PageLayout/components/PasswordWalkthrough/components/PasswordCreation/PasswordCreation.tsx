@@ -77,6 +77,7 @@ export default class PasswordCreation extends React.Component<Props, State> {
             numberOfKeys={passwordOptions}
             password={generatedPassword}
             practiceMode={practiceMode}
+            stopPracticing={this.stopPracticing}
           />
         </Modal.Section>
       </Modal>

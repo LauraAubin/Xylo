@@ -17,6 +17,7 @@ interface Props {
   numberOfKeys: number;
   password: number[];
   practiceMode?: boolean;
+  stopPracticing?(): void;
 }
 
 interface State {
@@ -30,8 +31,22 @@ export default class XylophoneContainer extends React.Component<Props, State> {
     this.state = { repeatPasswordVisualization: 0 };
   }
 
+  componentDidUpdate(prevProps: Props) {
+    const { practiceMode } = this.props;
+
+    if (prevProps.practiceMode !== practiceMode && practiceMode) {
+      this.visualizePassword();
+    }
+  }
+
   public render() {
-    const { numberOfKeys, password, type, practiceMode } = this.props;
+    const {
+      numberOfKeys,
+      password,
+      type,
+      practiceMode,
+      stopPracticing
+    } = this.props;
     const { repeatPasswordVisualization } = this.state;
 
     return (
@@ -40,7 +55,7 @@ export default class XylophoneContainer extends React.Component<Props, State> {
           numberOfKeys={numberOfKeys}
           generatedPassword={password}
           repeatPasswordVisualization={repeatPasswordVisualization}
-          practiceMode={practiceMode}
+          stopPracticing={stopPracticing}
         />
         {type === Type.creation && (
           <Button
