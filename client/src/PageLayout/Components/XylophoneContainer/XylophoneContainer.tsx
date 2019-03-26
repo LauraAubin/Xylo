@@ -40,9 +40,14 @@ export default class XylophoneContainer extends React.Component<Props, State> {
           numberOfKeys={numberOfKeys}
           generatedPassword={password}
           repeatPasswordVisualization={repeatPasswordVisualization}
+          practiceMode={practiceMode}
         />
-        {type === Type.creation && !practiceMode && (
-          <Button plain onClick={this.visualizePassword}>
+        {type === Type.creation && (
+          <Button
+            plain
+            disabled={practiceMode}
+            onClick={this.visualizePassword}
+          >
             Play password
           </Button>
         )}

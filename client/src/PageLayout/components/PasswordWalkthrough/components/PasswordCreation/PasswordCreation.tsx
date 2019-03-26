@@ -31,6 +31,15 @@ export default class PasswordCreation extends React.Component<Props, State> {
     this.state = { practiceMode: false };
   }
 
+  componentDidUpdate() {
+    const { showModal } = this.props;
+    const { practiceMode } = this.state;
+
+    if (!showModal && practiceMode) {
+      this.stopPracticing();
+    }
+  }
+
   public render() {
     const {
       showModal,
@@ -121,5 +130,10 @@ export default class PasswordCreation extends React.Component<Props, State> {
   @autobind
   private practiceClicked() {
     this.setState({ practiceMode: true });
+  }
+
+  @autobind
+  private stopPracticing() {
+    this.setState({ practiceMode: false });
   }
 }
