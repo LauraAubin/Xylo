@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import autobind from "autobind-decorator";
 import XylophoneContainer from "../../../XylophoneContainer";
 
 import { Button, Icon, Modal, Stack, TextStyle } from "@shopify/polaris";
@@ -18,9 +19,29 @@ interface Props {
   step: number;
   closeModal(): void;
   handleModal(): void;
+  showToast(toastContent: string, toastError: boolean): void;
 }
 
-export default class PasswordCreation extends React.Component<Props> {
+interface State {
+  practiceMode: boolean;
+}
+
+export default class PasswordCreation extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { practiceMode: false };
+  }
+
+  componentDidUpdate() {
+    const { showModal } = this.props;
+    const { practiceMode } = this.state;
+
+    const modalClosedWhilePracticeModeIsActive = !showModal && practiceMode;
+    if (modalClosedWhilePracticeModeIsActive) {
+      this.stopPracticing();
+    }
+  }
+
   public render() {
     const {
       showModal,
@@ -28,11 +49,19 @@ export default class PasswordCreation extends React.Component<Props> {
       generatedPassword,
       step,
       closeModal,
-      handleModal
+      handleModal,
+      showToast
     } = this.props;
+
+    const { practiceMode } = this.state;
 
     const modalFooter = (
       <div className="ModalFooterArea">
+        <div className="PracticeButton">
+          <Button disabled={practiceMode} onClick={this.practiceClicked}>
+            Practice
+          </Button>
+        </div>
         <Button primary onClick={closeModal}>
           Got it
         </Button>
@@ -52,6 +81,9 @@ export default class PasswordCreation extends React.Component<Props> {
             type={Type.creation}
             numberOfKeys={passwordOptions}
             password={generatedPassword}
+            practiceMode={practiceMode}
+            stopPracticing={this.stopPracticing}
+            showToast={showToast}
           />
         </Modal.Section>
       </Modal>
@@ -100,5 +132,15 @@ export default class PasswordCreation extends React.Component<Props> {
         {modalMarkup}
       </>
     );
+  }
+
+  @autobind
+  private practiceClicked() {
+    this.setState({ practiceMode: true });
+  }
+
+  @autobind
+  private stopPracticing() {
+    this.setState({ practiceMode: false });
   }
 }

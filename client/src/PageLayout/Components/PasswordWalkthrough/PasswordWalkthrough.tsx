@@ -4,7 +4,7 @@ import autobind from "autobind-decorator";
 import PasswordCreation from "./components/PasswordCreation";
 import PasswordRecall from "./components/PasswordRecall";
 
-import { Card } from "@shopify/polaris";
+import { Card, Frame, Toast } from "@shopify/polaris";
 import { emptyArray } from "../../../Utilities/Utilities";
 import { flow } from "./flow";
 
@@ -19,6 +19,9 @@ interface State {
   createdPasswords: number[][];
   shuffledPasswords: number[][];
   step: number;
+  showToast: boolean;
+  toastError: boolean;
+  toastContent: string;
 }
 
 export default class PasswordWalkthrough extends React.Component<{}, State> {
@@ -28,7 +31,10 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
       showModal: false,
       createdPasswords: [],
       shuffledPasswords: [],
-      step: 0
+      step: 0,
+      showToast: false,
+      toastError: false,
+      toastContent: ""
     };
   }
 
@@ -45,7 +51,15 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
   }
 
   public render() {
-    const { showModal, createdPasswords, shuffledPasswords, step } = this.state;
+    const {
+      showModal,
+      createdPasswords,
+      shuffledPasswords,
+      step,
+      showToast,
+      toastError,
+      toastContent
+    } = this.state;
 
     const flowSteps = flow(
       createdPasswords,
@@ -77,6 +91,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
                 closeModal={this.closeModal}
                 handleModal={this.handleModal}
                 step={step}
+                showToast={this.showToast}
               />
             )}
             {!isCreatingPassword && (
@@ -92,7 +107,18 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
         </Card>
       );
 
-      return <div className="CenterElement">{passwordMarkup}</div>;
+      return (
+        <Frame>
+          <div className="CenterElement">{passwordMarkup}</div>
+          {showToast && (
+            <Toast
+              content={toastContent}
+              error={toastError}
+              onDismiss={this.toggleToast}
+            />
+          )}
+        </Frame>
+      );
     }
   }
 
@@ -127,5 +153,18 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
 
     this.setState({ step: step + 1 });
     this.handleModal();
+  }
+
+  @autobind
+  private toggleToast() {
+    const { showToast } = this.state;
+
+    this.setState({ showToast: !showToast });
+  }
+
+  @autobind
+  private showToast(toastContent: string, toastError: boolean) {
+    this.setState({ toastContent, toastError });
+    this.toggleToast();
   }
 }
