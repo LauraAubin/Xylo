@@ -22,13 +22,14 @@ interface Props {
 
 interface State {
   repeatPasswordVisualization: number;
+  keysPressed: number[];
 }
 
 export default class XylophoneContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { repeatPasswordVisualization: 0 };
+    this.state = { repeatPasswordVisualization: 0, keysPressed: [] };
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -55,7 +56,9 @@ export default class XylophoneContainer extends React.Component<Props, State> {
           numberOfKeys={numberOfKeys}
           generatedPassword={password}
           repeatPasswordVisualization={repeatPasswordVisualization}
+          practiceMode={practiceMode}
           stopPracticing={stopPracticing}
+          addNewPressedKey={this.addNewPressedKey}
         />
         {type === Type.creation && (
           <Button
@@ -77,5 +80,14 @@ export default class XylophoneContainer extends React.Component<Props, State> {
     this.setState({
       repeatPasswordVisualization: repeatPasswordVisualization + 1
     });
+  }
+
+  @autobind
+  private addNewPressedKey(key: number) {
+    const {keysPressed} = this.state;
+
+    keysPressed.push(key);
+
+    this.setState({keysPressed});
   }
 }

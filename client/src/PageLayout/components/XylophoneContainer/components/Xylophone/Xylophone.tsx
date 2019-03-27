@@ -9,7 +9,9 @@ interface Props {
   numberOfKeys: number;
   generatedPassword: number[];
   repeatPasswordVisualization?: number;
+  practiceMode?: boolean;
   stopPracticing?(): void;
+  addNewPressedKey?(key: number): void;
 }
 
 interface State {
@@ -24,6 +26,11 @@ enum AnimationActions {
   Remove
 }
 
+enum AnimationType {
+  Full,
+  Pulse
+}
+
 export default class Xylophone extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -31,10 +38,14 @@ export default class Xylophone extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { repeatPasswordVisualization } = this.props;
+    const { repeatPasswordVisualization, practiceMode } = this.props;
 
     if (prevProps.repeatPasswordVisualization !== repeatPasswordVisualization) {
-      this.visualizePassword();
+      const animationType = practiceMode
+        ? AnimationType.Pulse
+        : AnimationType.Full;
+
+      this.visualizePassword(animationType);
     }
   }
 
@@ -50,6 +61,7 @@ export default class Xylophone extends React.Component<Props, State> {
       keys.push(
         <div
           className={`SeparateKeys`}
+          onClick={this.pressedKey(i)}
           id={`keyContainer-${i}`}
           key={`Key-${i}`}
         >
@@ -62,19 +74,28 @@ export default class Xylophone extends React.Component<Props, State> {
   }
 
   @autobind
-  private visualizePassword() {
+  private pressedKey(key: number) {
+    const { addNewPressedKey } = this.props;
+
+    return () => {
+      addNewPressedKey && addNewPressedKey(key);
+    };
+  }
+
+  @autobind
+  private visualizePassword(type: AnimationType) {
     const interval = setInterval(
-      () => this.animateNextKey(),
+      () => this.animateNextKey(type),
       PULSE_DURATION + 100
     );
 
     this.setState({ intervalInstance: interval });
   }
 
-  private animateNextKey() {
+  private animateNextKey(type: AnimationType) {
     const { animationIterator } = this.state;
 
-    this.addKeyAnimations();
+    this.addKeyAnimations(type);
     this.removeKeyAnimations();
 
     this.setState({ animationIterator: animationIterator + 1 });
@@ -105,14 +126,15 @@ export default class Xylophone extends React.Component<Props, State> {
     stopPracticing && stopPracticing();
   }
 
-  private addKeyAnimations() {
+  private addKeyAnimations(type: AnimationType) {
     const { generatedPassword } = this.props;
     const { animationIterator } = this.state;
 
     const specificKeyValue = generatedPassword[animationIterator];
 
     this.pulse(AnimationActions.Add, specificKeyValue);
-    this.darkenKey(AnimationActions.Add, specificKeyValue, true);
+    type === AnimationType.Full &&
+      this.darkenKey(AnimationActions.Add, specificKeyValue, true);
   }
 
   private removeKeyAnimations() {
