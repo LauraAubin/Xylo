@@ -35,7 +35,8 @@ export default class PasswordCreation extends React.Component<Props, State> {
     const { showModal } = this.props;
     const { practiceMode } = this.state;
 
-    if (!showModal && practiceMode) {
+    const modalClosedWhilePracticeModeIsActive = !showModal && practiceMode;
+    if (modalClosedWhilePracticeModeIsActive) {
       this.stopPracticing();
     }
   }

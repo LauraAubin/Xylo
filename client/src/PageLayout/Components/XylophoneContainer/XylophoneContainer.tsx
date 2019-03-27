@@ -35,19 +35,21 @@ export default class XylophoneContainer extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     const { practiceMode } = this.props;
 
-    if (prevProps.practiceMode !== practiceMode && practiceMode) {
+    const practiceModeActivated =
+      prevProps.practiceMode !== practiceMode && practiceMode;
+    if (practiceModeActivated) {
       this.visualizePassword();
+    }
+
+    const practiceModeCancelled =
+      prevProps.practiceMode !== practiceMode && !practiceMode;
+    if (practiceModeCancelled) {
+      this.resetKeysPressed();
     }
   }
 
   public render() {
-    const {
-      numberOfKeys,
-      password,
-      type,
-      practiceMode,
-      stopPracticing
-    } = this.props;
+    const { numberOfKeys, password, type, practiceMode } = this.props;
     const { repeatPasswordVisualization } = this.state;
 
     return (
@@ -96,5 +98,9 @@ export default class XylophoneContainer extends React.Component<Props, State> {
         stopPracticing && stopPracticing();
       }
     }
+  }
+
+  private resetKeysPressed() {
+    this.setState({ keysPressed: [] });
   }
 }
