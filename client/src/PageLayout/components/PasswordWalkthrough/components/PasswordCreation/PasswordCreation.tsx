@@ -55,7 +55,7 @@ export default class PasswordCreation extends React.Component<Props, State> {
     const modalFooter = (
       <div className="ModalFooterArea">
         <div className="PracticeButton">
-          <Button onClick={this.practiceClicked}>Practice</Button>
+          <Button disabled={practiceMode} onClick={this.practiceClicked}>Practice</Button>
         </div>
         <Button primary onClick={closeModal}>
           Got it

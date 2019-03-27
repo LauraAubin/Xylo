@@ -10,7 +10,6 @@ interface Props {
   generatedPassword: number[];
   repeatPasswordVisualization?: number;
   practiceMode?: boolean;
-  stopPracticing?(): void;
   addNewPressedKey?(key: number): void;
 }
 
@@ -116,14 +115,11 @@ export default class Xylophone extends React.Component<Props, State> {
   }
 
   private stopAnimationCycle() {
-    const { stopPracticing } = this.props;
     const { intervalInstance } = this.state;
 
     clearInterval(intervalInstance);
 
     this.setState({ animationIterator: 0 });
-
-    stopPracticing && stopPracticing();
   }
 
   private addKeyAnimations(type: AnimationType) {

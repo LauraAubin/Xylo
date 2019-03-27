@@ -57,7 +57,6 @@ export default class XylophoneContainer extends React.Component<Props, State> {
           generatedPassword={password}
           repeatPasswordVisualization={repeatPasswordVisualization}
           practiceMode={practiceMode}
-          stopPracticing={stopPracticing}
           addNewPressedKey={this.addNewPressedKey}
         />
         {type === Type.creation && (
@@ -84,10 +83,18 @@ export default class XylophoneContainer extends React.Component<Props, State> {
 
   @autobind
   private addNewPressedKey(key: number) {
-    const {keysPressed} = this.state;
+    const { practiceMode, password, stopPracticing } = this.props;
+    const { keysPressed } = this.state;
 
-    keysPressed.push(key);
+    if (practiceMode) {
+      keysPressed.push(key);
 
-    this.setState({keysPressed});
+      this.setState({ keysPressed });
+
+      const fullPasswordLengthExplored = keysPressed.length === password.length;
+      if (fullPasswordLengthExplored) {
+        stopPracticing && stopPracticing();
+      }
+    }
   }
 }
