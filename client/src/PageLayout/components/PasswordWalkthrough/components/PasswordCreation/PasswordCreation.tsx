@@ -19,6 +19,7 @@ interface Props {
   step: number;
   closeModal(): void;
   handleModal(): void;
+  showToast(toastContent: string, toastError: boolean): void;
 }
 
 interface State {
@@ -48,7 +49,8 @@ export default class PasswordCreation extends React.Component<Props, State> {
       generatedPassword,
       step,
       closeModal,
-      handleModal
+      handleModal,
+      showToast
     } = this.props;
 
     const { practiceMode } = this.state;
@@ -56,7 +58,9 @@ export default class PasswordCreation extends React.Component<Props, State> {
     const modalFooter = (
       <div className="ModalFooterArea">
         <div className="PracticeButton">
-          <Button disabled={practiceMode} onClick={this.practiceClicked}>Practice</Button>
+          <Button disabled={practiceMode} onClick={this.practiceClicked}>
+            Practice
+          </Button>
         </div>
         <Button primary onClick={closeModal}>
           Got it
@@ -79,6 +83,7 @@ export default class PasswordCreation extends React.Component<Props, State> {
             password={generatedPassword}
             practiceMode={practiceMode}
             stopPracticing={this.stopPracticing}
+            showToast={showToast}
           />
         </Modal.Section>
       </Modal>

@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Button } from "@shopify/polaris";
+import {isEqual} from "lodash";
 
 import autobind from "autobind-decorator";
 import Xylophone from "./components/Xylophone";
@@ -18,18 +19,24 @@ interface Props {
   password: number[];
   practiceMode?: boolean;
   stopPracticing?(): void;
+  showToast?(toastContent: string, toastError: boolean): void;
 }
 
 interface State {
   repeatPasswordVisualization: number;
   keysPressed: number[];
+  showToast: boolean;
 }
 
 export default class XylophoneContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { repeatPasswordVisualization: 0, keysPressed: [] };
+    this.state = {
+      repeatPasswordVisualization: 0,
+      keysPressed: [],
+      showToast: false
+    };
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -50,7 +57,7 @@ export default class XylophoneContainer extends React.Component<Props, State> {
 
   public render() {
     const { numberOfKeys, password, type, practiceMode } = this.props;
-    const { repeatPasswordVisualization } = this.state;
+    const { repeatPasswordVisualization, showToast } = this.state;
 
     return (
       <div className="Center">
@@ -95,6 +102,8 @@ export default class XylophoneContainer extends React.Component<Props, State> {
 
       const fullPasswordLengthExplored = keysPressed.length === password.length;
       if (fullPasswordLengthExplored) {
+
+        this.launchToastMessage();
         stopPracticing && stopPracticing();
       }
     }
@@ -102,5 +111,17 @@ export default class XylophoneContainer extends React.Component<Props, State> {
 
   private resetKeysPressed() {
     this.setState({ keysPressed: [] });
+  }
+
+  private launchToastMessage() {
+    const { password, showToast } = this.props;
+    const { keysPressed } = this.state;
+
+    if (isEqual(keysPressed, password)) {
+      showToast && showToast("Correct!", false);
+
+    } else {
+      showToast && showToast("Whoops, not quite right", true);
+    }
   }
 }
