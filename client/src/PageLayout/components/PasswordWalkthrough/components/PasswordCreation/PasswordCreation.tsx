@@ -3,7 +3,14 @@ import * as React from "react";
 import autobind from "autobind-decorator";
 import XylophoneContainer from "../../../XylophoneContainer";
 
-import { Button, Icon, Modal, Stack, TextStyle } from "@shopify/polaris";
+import {
+  Button,
+  Icon,
+  Modal,
+  Stack,
+  TextStyle,
+  Tooltip
+} from "@shopify/polaris";
 
 import "./PasswordCreation.scss";
 
@@ -58,9 +65,11 @@ export default class PasswordCreation extends React.Component<Props, State> {
     const modalFooter = (
       <div className="ModalFooterArea">
         <div className="PracticeButton">
-          <Button disabled={practiceMode} onClick={this.practiceClicked}>
-            Practice
-          </Button>
+          <Tooltip content="Try to follow along with the displayed password">
+            <Button disabled={practiceMode} onClick={this.practiceClicked}>
+              Practice
+            </Button>
+          </Tooltip>
         </div>
         <Button primary onClick={closeModal}>
           Got it
