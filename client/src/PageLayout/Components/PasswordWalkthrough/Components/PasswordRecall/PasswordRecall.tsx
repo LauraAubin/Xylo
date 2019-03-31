@@ -1,8 +1,9 @@
-import * as React from 'react';
+import * as React from "react";
 
+import PasswordStack from "../components/PasswordStack";
 import XylophoneContainer from "../../../XylophoneContainer";
 
-import { Button, Modal } from "@shopify/polaris";
+import { Modal } from "@shopify/polaris";
 
 enum Type {
   creation,
@@ -13,6 +14,8 @@ interface Props {
   showModal: boolean;
   passwordOptions: number;
   password: number[];
+  step: number;
+  createElements(): { type: string; color: string; icon: string }[];
   closeModal(): void;
   handleModal(): void;
 }
@@ -23,6 +26,8 @@ export default class PasswordRecall extends React.Component<Props> {
       showModal,
       passwordOptions,
       password,
+      step,
+      createElements,
       closeModal,
       handleModal
     } = this.props;
@@ -50,7 +55,12 @@ export default class PasswordRecall extends React.Component<Props> {
 
     return (
       <>
-        <Button onClick={handleModal}>Remember password</Button>
+        <PasswordStack
+          step={step}
+          elements={createElements()}
+          buttonText="Remember password"
+          onClick={handleModal}
+        />
         {modalMarkup}
       </>
     );
