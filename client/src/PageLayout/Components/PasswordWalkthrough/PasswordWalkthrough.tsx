@@ -5,7 +5,6 @@ import PasswordCreation from "./components/PasswordCreation";
 import PasswordRecall from "./components/PasswordRecall";
 
 import { Card, Frame, Toast } from "@shopify/polaris";
-import { emptyArray } from "../../../Utilities/Utilities";
 import { flow } from "./flow";
 
 import "./PssswordWalkthrough.scss";
@@ -15,6 +14,12 @@ const PASSWORD_LENGTH = 6;
 const NUMBER_OF_PASSWORDS = 3;
 
 const SHUFFLED_SEQUENCE = [1, 2, 0];
+
+const PASSWORD_TYPES = [
+  { type: "Shopping", color: "blue", icon: "products" },
+  { type: "Home", color: "teal", icon: "home" },
+  { type: "Phone", color: "red", icon: "notification" }
+];
 
 interface State {
   showModal: boolean;
@@ -83,6 +88,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
                 closeModal={this.closeModal}
                 handleModal={this.handleModal}
                 step={step}
+                passwordStackElements={PASSWORD_TYPES}
                 showToast={this.showToast}
               />
             )}
@@ -92,6 +98,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
                 passwordOptions={PASSWORD_OPTIONS}
                 password={data}
                 step={step}
+                createElements={this.createShuffledPasswordTypes}
                 closeModal={this.closeModal}
                 handleModal={this.handleModal}
               />
@@ -125,6 +132,10 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
     return Array.from({ length: NUMBER_OF_PASSWORDS }, () =>
       this.generatePassword()
     );
+  }
+
+  private createShuffledPasswordTypes() {
+    return SHUFFLED_SEQUENCE.map(i => PASSWORD_TYPES[i]);
   }
 
   @autobind
