@@ -18,6 +18,7 @@ interface Props {
   passwordOptions: number;
   generatedPassword: number[];
   step: number;
+  passwordStackElements: { type: string; color: string; icon: string }[];
   closeModal(): void;
   handleModal(): void;
   showToast(toastContent: string, toastError: boolean): void;
@@ -49,6 +50,7 @@ export default class PasswordCreation extends React.Component<Props, State> {
       passwordOptions,
       generatedPassword,
       step,
+      passwordStackElements,
       closeModal,
       handleModal,
       showToast
@@ -96,6 +98,7 @@ export default class PasswordCreation extends React.Component<Props, State> {
       <>
         <PasswordStack
           step={step}
+          elements={passwordStackElements}
           buttonText="Create password"
           onClick={handleModal}
         />
