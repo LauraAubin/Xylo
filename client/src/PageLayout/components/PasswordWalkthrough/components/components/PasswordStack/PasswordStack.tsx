@@ -14,6 +14,8 @@ export default class PasswordStack extends React.Component<Props> {
   public render() {
     const { step, buttonText, onClick } = this.props;
 
+    const passwordRecallInitialStep = 3;
+
     const pageMarkup = [
       { type: "Shopping", color: "blue", icon: "products" },
       { type: "Home", color: "teal", icon: "home" },
@@ -39,7 +41,7 @@ export default class PasswordStack extends React.Component<Props> {
             <TextStyle variation="subdued">{item.type}</TextStyle>
           </Stack.Item>
           <Stack.Item>
-            {index === step && (
+            {(index === step || index + passwordRecallInitialStep === step) && (
               <ul className={`ArrowButton ArrowButton--${item.color}`}>
                 <li>
                   <a onClick={onClick}>{buttonText}</a>
