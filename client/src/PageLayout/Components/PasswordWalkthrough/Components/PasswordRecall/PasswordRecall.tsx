@@ -28,20 +28,18 @@ export default class PasswordRecall extends React.Component<Props> {
       password,
       step,
       createElements,
-      closeModal,
       handleModal
     } = this.props;
+
+    const elements = createElements();
+    const elementName = elements[step - 3].type;
 
     const modalMarkup = (
       <Modal
         large
-        title="Try to recall the password for x"
+        title={`Try to remember the password for ${elementName.toLowerCase()}`}
         open={showModal}
         onClose={handleModal}
-        primaryAction={{
-          content: "Got it",
-          onAction: closeModal
-        }}
       >
         <Modal.Section>
           <XylophoneContainer
@@ -57,7 +55,7 @@ export default class PasswordRecall extends React.Component<Props> {
       <>
         <PasswordStack
           step={step}
-          elements={createElements()}
+          elements={elements}
           buttonText="Remember password"
           onClick={handleModal}
         />
