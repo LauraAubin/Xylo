@@ -14,10 +14,11 @@ const PASSWORD_OPTIONS = 12;
 const PASSWORD_LENGTH = 6;
 const NUMBER_OF_PASSWORDS = 3;
 
+const SHUFFLED_SEQUENCE = [1, 2, 0];
+
 interface State {
   showModal: boolean;
   createdPasswords: number[][];
-  shuffledPasswords: number[][];
   step: number;
   showToast: boolean;
   toastError: boolean;
@@ -30,7 +31,6 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
     this.state = {
       showModal: false,
       createdPasswords: [],
-      shuffledPasswords: [],
       step: 0,
       showToast: false,
       toastError: false,
@@ -42,19 +42,10 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
     this.setState({ createdPasswords: this.createThreePasswords() });
   }
 
-  componentDidUpdate() {
-    const { createdPasswords, shuffledPasswords } = this.state;
-
-    if (!emptyArray(createdPasswords) && emptyArray(shuffledPasswords)) {
-      this.setState({ shuffledPasswords: this.createShuffledPasswords() });
-    }
-  }
-
   public render() {
     const {
       showModal,
       createdPasswords,
-      shuffledPasswords,
       step,
       showToast,
       toastError,
@@ -63,8 +54,9 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
 
     const flowSteps = flow(
       createdPasswords,
-      shuffledPasswords
+      SHUFFLED_SEQUENCE
     );
+
     const endOfFlow = step >= flowSteps.length;
 
     if (endOfFlow) {
@@ -99,6 +91,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
                 showModal={showModal}
                 passwordOptions={PASSWORD_OPTIONS}
                 password={data}
+                step={step}
                 closeModal={this.closeModal}
                 handleModal={this.handleModal}
               />
@@ -132,12 +125,6 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
     return Array.from({ length: NUMBER_OF_PASSWORDS }, () =>
       this.generatePassword()
     );
-  }
-
-  private createShuffledPasswords() {
-    const { createdPasswords } = this.state;
-
-    return createdPasswords.sort(() => Math.random() - 0.5);
   }
 
   @autobind

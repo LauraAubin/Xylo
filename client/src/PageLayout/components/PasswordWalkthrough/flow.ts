@@ -1,7 +1,4 @@
-export function flow(
-  createdPasswords: number[][],
-  shuffledPasswords: number[][]
-) {
+export function flow(createdPasswords: number[][], shuffledSequence: number[]) {
   return [
     {
       title: "Create a password for",
@@ -22,21 +19,21 @@ export function flow(
       description: "Show third password"
     },
     {
-      title: "Remember a password",
+      title: "Remember the password for",
       action: { isCreatingPassword: false },
-      data: shuffledPasswords[0],
+      data: createdPasswords[shuffledSequence[0]],
       description: "Remember first password"
     },
     {
-      title: "Remember a password",
+      title: "Remember the password for",
       action: { isCreatingPassword: false },
-      data: shuffledPasswords[1],
+      data: createdPasswords[shuffledSequence[1]],
       description: "Remember second password"
     },
     {
-      title: "Remember a password",
+      title: "Remember the password for",
       action: { isCreatingPassword: false },
-      data: shuffledPasswords[2],
+      data: createdPasswords[shuffledSequence[2]],
       description: "Remember third password"
     }
   ];
