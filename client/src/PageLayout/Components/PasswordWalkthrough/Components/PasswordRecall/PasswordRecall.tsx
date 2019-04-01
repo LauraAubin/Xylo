@@ -3,7 +3,7 @@ import * as React from "react";
 import PasswordStack from "../components/PasswordStack";
 import XylophoneContainer from "../../../XylophoneContainer";
 
-import { Modal } from "@shopify/polaris";
+import { Modal, TextStyle } from "@shopify/polaris";
 
 enum Type {
   creation,
@@ -20,7 +20,16 @@ interface Props {
   handleModal(): void;
 }
 
-export default class PasswordRecall extends React.Component<Props> {
+interface State {
+  attemptsLeft: number;
+}
+
+export default class PasswordRecall extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { attemptsLeft: 3 };
+  }
+
   public render() {
     const {
       showModal,
@@ -31,8 +40,19 @@ export default class PasswordRecall extends React.Component<Props> {
       handleModal
     } = this.props;
 
+    const { attemptsLeft } = this.state;
+
     const elements = createElements();
     const elementName = elements[step - 3].type;
+
+    const attemptsTextColor = attemptsLeft === 1 ? "negative" : "subdued";
+
+    const footerMarkup = (
+      <div>
+        Attempts left:&nbsp;
+        <TextStyle variation={attemptsTextColor}>{attemptsLeft}</TextStyle>
+      </div>
+    );
 
     const modalMarkup = (
       <Modal
@@ -40,6 +60,7 @@ export default class PasswordRecall extends React.Component<Props> {
         title={`Try to remember the password for ${elementName.toLowerCase()}`}
         open={showModal}
         onClose={handleModal}
+        footer={footerMarkup}
       >
         <Modal.Section>
           <XylophoneContainer
