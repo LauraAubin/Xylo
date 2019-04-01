@@ -67,6 +67,7 @@ export default class PasswordRecall extends React.Component<Props, State> {
             type={Type.recall}
             numberOfKeys={passwordOptions}
             password={password}
+            recallMode
           />
         </Modal.Section>
       </Modal>

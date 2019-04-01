@@ -3,3 +3,7 @@
 .Center {
   @include CenterElement;
 }
+
+.ContainerHeight {
+  height: 270px;
+}

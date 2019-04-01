@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Icon } from "@shopify/polaris";
+
 import autobind from "autobind-decorator";
 import Key from "./Key";
 
@@ -10,6 +12,9 @@ interface Props {
   generatedPassword: number[];
   repeatPasswordVisualization?: number;
   practiceMode?: boolean;
+  recallMode?: boolean;
+  pressedKey?: number;
+  singlePressedKey?(key: number): void;
   addNewPressedKey?(key: number): void;
 }
 
@@ -33,7 +38,10 @@ enum AnimationType {
 export default class Xylophone extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { animationIterator: 0, intervalInstance: undefined };
+    this.state = {
+      animationIterator: 0,
+      intervalInstance: undefined
+    };
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -53,18 +61,25 @@ export default class Xylophone extends React.Component<Props, State> {
   }
 
   private renderKeys() {
-    const { numberOfKeys } = this.props;
+    const { numberOfKeys, recallMode, pressedKey } = this.props;
 
     const keys = [];
     for (let i = 1; i < numberOfKeys + 1; i++) {
       keys.push(
-        <div
-          className={`SeparateKeys`}
-          onClick={this.pressedKey(i)}
-          id={`keyContainer-${i}`}
-          key={`Key-${i}`}
-        >
-          <Key identifier={i} key={i} />
+        <div className="KeySelection">
+          <div
+            className={`SeparateKeys`}
+            onClick={this.pressedKey(i)}
+            id={`keyContainer-${i}`}
+            key={`Key-${i}`}
+          >
+            <Key identifier={i} key={i} />
+          </div>
+          {recallMode && i === pressedKey && (
+            <div className="KeyArrow">
+              <Icon source="arrowUp" color="blue" />
+            </div>
+          )}
         </div>
       );
     }
@@ -74,9 +89,13 @@ export default class Xylophone extends React.Component<Props, State> {
 
   @autobind
   private pressedKey(key: number) {
-    const { addNewPressedKey } = this.props;
+    const { recallMode, addNewPressedKey, singlePressedKey } = this.props;
 
     return () => {
+      if (recallMode) {
+        singlePressedKey && singlePressedKey(key);
+      }
+
       addNewPressedKey && addNewPressedKey(key);
     };
   }
