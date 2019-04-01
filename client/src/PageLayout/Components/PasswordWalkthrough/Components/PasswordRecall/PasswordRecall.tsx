@@ -18,6 +18,7 @@ interface Props {
   createElements(): { type: string; color: string; icon: string }[];
   closeModal(): void;
   handleModal(): void;
+  showToast(toastContent: string, toastError: boolean): void;
 }
 
 interface State {
@@ -37,7 +38,8 @@ export default class PasswordRecall extends React.Component<Props, State> {
       password,
       step,
       createElements,
-      handleModal
+      handleModal,
+      showToast
     } = this.props;
 
     const { attemptsLeft } = this.state;
@@ -67,6 +69,7 @@ export default class PasswordRecall extends React.Component<Props, State> {
             type={Type.recall}
             numberOfKeys={passwordOptions}
             password={password}
+            showToast={showToast}
             recallMode
           />
         </Modal.Section>

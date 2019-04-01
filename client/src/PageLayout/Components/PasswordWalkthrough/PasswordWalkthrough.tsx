@@ -101,6 +101,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
                 createElements={this.createShuffledPasswordTypes}
                 closeModal={this.closeModal}
                 handleModal={this.handleModal}
+                showToast={this.showToast}
               />
             )}
           </div>
