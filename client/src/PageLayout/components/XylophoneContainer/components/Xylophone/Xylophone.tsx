@@ -4,8 +4,12 @@ import { Icon } from "@shopify/polaris";
 
 import autobind from "autobind-decorator";
 import Key from "./Key";
+import Sound from "react-sound";
 
 import "./Xylophone.scss";
+
+// Serves to GET http://localhost:3000/Sound/Notes/1.mp3
+const SOUND_URL = "Sound/Notes/";
 
 interface Props {
   numberOfKeys: number;
@@ -19,6 +23,7 @@ interface Props {
 }
 
 interface State {
+  playKeySound?: number;
   animationIterator: number;
   intervalInstance: any;
 }
@@ -39,6 +44,7 @@ export default class Xylophone extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      playKeySound: undefined,
       animationIterator: 0,
       intervalInstance: undefined
     };
@@ -57,7 +63,17 @@ export default class Xylophone extends React.Component<Props, State> {
   }
 
   public render() {
-    return <div className="KeysContainer">{this.renderKeys()}</div>;
+    const { playKeySound } = this.state;
+
+    return (
+      <>
+        <div className="KeysContainer">{this.renderKeys()}</div>
+        <Sound
+          url={`${SOUND_URL}${playKeySound}.mp3`}
+          playStatus={Sound.status.PLAYING}
+        />
+      </>
+    );
   }
 
   private renderKeys() {
@@ -97,6 +113,8 @@ export default class Xylophone extends React.Component<Props, State> {
       }
 
       addNewPressedKey && addNewPressedKey(key);
+
+      this.setState({ playKeySound: key });
     };
   }
 
