@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import autobind from "autobind-decorator";
 import PasswordStack from "../components/PasswordStack";
 import XylophoneContainer from "../../../XylophoneContainer";
 
@@ -18,6 +19,7 @@ interface Props {
   createElements(): { type: string; color: string; icon: string }[];
   closeModal(): void;
   handleModal(): void;
+  showToast(toastContent: string, toastError: boolean): void;
 }
 
 interface State {
@@ -37,7 +39,8 @@ export default class PasswordRecall extends React.Component<Props, State> {
       password,
       step,
       createElements,
-      handleModal
+      handleModal,
+      showToast
     } = this.props;
 
     const { attemptsLeft } = this.state;
@@ -67,6 +70,9 @@ export default class PasswordRecall extends React.Component<Props, State> {
             type={Type.recall}
             numberOfKeys={passwordOptions}
             password={password}
+            showToast={showToast}
+            correctAttempt={this.correctAttempt}
+            badAttempt={this.badAttempt}
             recallMode
           />
         </Modal.Section>
@@ -84,5 +90,33 @@ export default class PasswordRecall extends React.Component<Props, State> {
         {modalMarkup}
       </>
     );
+  }
+
+  @autobind
+  private correctAttempt() {
+    this.endTurn();
+  }
+
+  @autobind
+  private badAttempt() {
+    const { attemptsLeft } = this.state;
+
+    if (attemptsLeft === 1) {
+      this.resetAttempts();
+      this.endTurn();
+    } else {
+      this.setState({ attemptsLeft: attemptsLeft - 1 });
+    }
+  }
+
+  private endTurn() {
+    const { closeModal } = this.props;
+
+    this.resetAttempts();
+    closeModal();
+  }
+
+  private resetAttempts() {
+    this.setState({ attemptsLeft: 3 });
   }
 }

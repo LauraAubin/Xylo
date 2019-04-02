@@ -20,7 +20,9 @@ interface Props {
   practiceMode?: boolean;
   recallMode?: boolean;
   stopPracticing?(): void;
-  showToast?(toastContent: string, toastError: boolean): void;
+  correctAttempt?(): void;
+  badAttempt?(): void;
+  showToast(toastContent: string, toastError: boolean): void;
 }
 
 interface State {
@@ -47,14 +49,9 @@ export default class XylophoneContainer extends React.Component<Props, State> {
 
     const practiceModeActivated =
       prevProps.practiceMode !== practiceMode && practiceMode;
+
     if (practiceModeActivated) {
       this.visualizePassword();
-    }
-
-    const practiceModeCancelled =
-      prevProps.practiceMode !== practiceMode && !practiceMode;
-    if (practiceModeCancelled) {
-      this.resetKeysPressed();
     }
   }
 
@@ -114,39 +111,55 @@ export default class XylophoneContainer extends React.Component<Props, State> {
 
   @autobind
   private addNewPressedKey(key: number) {
-    const { practiceMode, password, stopPracticing } = this.props;
-    const { keysPressed } = this.state;
+    const { practiceMode, stopPracticing } = this.props;
 
     if (practiceMode) {
-      keysPressed.push(key);
-
-      this.setState({ keysPressed });
-
-      const fullPasswordLengthExplored = keysPressed.length === password.length;
-      if (fullPasswordLengthExplored) {
-        this.launchToastMessage();
-        stopPracticing && stopPracticing();
-      }
+      this.addAnotherKey(key);
+      this.evaluateExploredPassword() && stopPracticing && stopPracticing();
     }
   }
 
-  private resetKeysPressed() {
-    this.setState({ keysPressed: [] });
+  private addAnotherKey(key: number) {
+    const { keysPressed } = this.state;
+
+    keysPressed.push(key);
+    this.setState({ keysPressed });
   }
 
   @autobind
   private confirmPressedKey() {
+    const { pressedKey } = this.state;
+
+    pressedKey && this.addAnotherKey(pressedKey);
+    this.evaluateExploredPassword();
+    this.clearPressedKey();
+  }
+
+  private clearPressedKey() {
     this.setState({ pressedKey: undefined });
   }
 
-  private launchToastMessage() {
-    const { password, showToast } = this.props;
+  private clearKeysPressed() {
+    this.setState({ keysPressed: [] });
+  }
+
+  private evaluateExploredPassword() {
+    const { password, showToast, badAttempt, correctAttempt } = this.props;
     const { keysPressed } = this.state;
 
-    if (isEqual(keysPressed, password)) {
-      showToast && showToast("Correct!", false);
-    } else {
-      showToast && showToast("Whoops, not quite right", true);
+    const fullPasswordLengthExplored = keysPressed.length === password.length;
+
+    if (fullPasswordLengthExplored) {
+      if (isEqual(keysPressed, password)) {
+        showToast && showToast("Correct!", false);
+        correctAttempt && correctAttempt();
+      } else {
+        showToast && showToast("Whoops, not quite right", true);
+        badAttempt && badAttempt();
+      }
+
+      this.clearKeysPressed();
+      return true;
     }
   }
 }
