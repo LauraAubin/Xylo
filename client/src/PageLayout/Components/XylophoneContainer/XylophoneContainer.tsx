@@ -20,6 +20,7 @@ interface Props {
   practiceMode?: boolean;
   recallMode?: boolean;
   stopPracticing?(): void;
+  correctAttempt?(): void;
   badAttempt?(): void;
   showToast(toastContent: string, toastError: boolean): void;
 }
@@ -143,7 +144,7 @@ export default class XylophoneContainer extends React.Component<Props, State> {
   }
 
   private evaluateExploredPassword() {
-    const { password, showToast, badAttempt } = this.props;
+    const { password, showToast, badAttempt, correctAttempt } = this.props;
     const { keysPressed } = this.state;
 
     const fullPasswordLengthExplored = keysPressed.length === password.length;
@@ -151,6 +152,7 @@ export default class XylophoneContainer extends React.Component<Props, State> {
     if (fullPasswordLengthExplored) {
       if (isEqual(keysPressed, password)) {
         showToast && showToast("Correct!", false);
+        correctAttempt && correctAttempt();
       } else {
         showToast && showToast("Whoops, not quite right", true);
         badAttempt && badAttempt();

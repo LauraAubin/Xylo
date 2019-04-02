@@ -71,6 +71,7 @@ export default class PasswordRecall extends React.Component<Props, State> {
             numberOfKeys={passwordOptions}
             password={password}
             showToast={showToast}
+            correctAttempt={this.correctAttempt}
             badAttempt={this.badAttempt}
             recallMode
           />
@@ -92,9 +93,30 @@ export default class PasswordRecall extends React.Component<Props, State> {
   }
 
   @autobind
+  private correctAttempt() {
+    this.endTurn();
+  }
+
+  @autobind
   private badAttempt() {
     const { attemptsLeft } = this.state;
 
-    this.setState({ attemptsLeft: attemptsLeft - 1 });
+    if (attemptsLeft === 1) {
+      this.resetAttempts();
+      this.endTurn();
+    } else {
+      this.setState({ attemptsLeft: attemptsLeft - 1 });
+    }
+  }
+
+  private endTurn() {
+    const { closeModal } = this.props;
+
+    this.resetAttempts();
+    closeModal();
+  }
+
+  private resetAttempts() {
+    this.setState({ attemptsLeft: 3 });
   }
 }
