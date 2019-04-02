@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import autobind from "autobind-decorator";
 import PasswordStack from "../components/PasswordStack";
 import XylophoneContainer from "../../../XylophoneContainer";
 
@@ -70,6 +71,7 @@ export default class PasswordRecall extends React.Component<Props, State> {
             numberOfKeys={passwordOptions}
             password={password}
             showToast={showToast}
+            badAttempt={this.badAttempt}
             recallMode
           />
         </Modal.Section>
@@ -87,5 +89,12 @@ export default class PasswordRecall extends React.Component<Props, State> {
         {modalMarkup}
       </>
     );
+  }
+
+  @autobind
+  private badAttempt() {
+    const { attemptsLeft } = this.state;
+
+    this.setState({ attemptsLeft: attemptsLeft - 1 });
   }
 }
