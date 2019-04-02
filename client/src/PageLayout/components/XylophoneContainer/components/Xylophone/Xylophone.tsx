@@ -58,6 +58,7 @@ export default class Xylophone extends React.Component<Props, State> {
         ? AnimationType.Pulse
         : AnimationType.Full;
 
+      this.resetPlayKeySound();
       this.visualizePassword(animationType);
     }
   }
@@ -111,9 +112,7 @@ export default class Xylophone extends React.Component<Props, State> {
       if (recallMode) {
         singlePressedKey && singlePressedKey(key);
       }
-
       addNewPressedKey && addNewPressedKey(key);
-
       this.setState({ playKeySound: key });
     };
   }
@@ -166,8 +165,11 @@ export default class Xylophone extends React.Component<Props, State> {
     const specificKeyValue = generatedPassword[animationIterator];
 
     this.pulse(AnimationActions.Add, specificKeyValue);
-    type === AnimationType.Full &&
-      this.darkenKey(AnimationActions.Add, specificKeyValue, true);
+
+    if (type === AnimationType.Full) {
+      this.playKeySound(specificKeyValue);
+      this.darkenKey(AnimationActions.Add, specificKeyValue, true)
+    }
   }
 
   private removeKeyAnimations() {
@@ -182,6 +184,10 @@ export default class Xylophone extends React.Component<Props, State> {
 
   private findKey(identifier: number, type: string) {
     return document.getElementById(`${type}-${identifier}`);
+  }
+
+  private playKeySound(key: number) {
+    this.setState({ playKeySound: key });
   }
 
   private pulse(action: AnimationActions, keyValue: number) {
@@ -220,5 +226,9 @@ export default class Xylophone extends React.Component<Props, State> {
           : foundKey.classList.remove(`Key-${keyValue}-Active`);
       }, delay);
     }
+  }
+
+  private resetPlayKeySound() {
+    this.setState({ playKeySound: undefined });
   }
 }
