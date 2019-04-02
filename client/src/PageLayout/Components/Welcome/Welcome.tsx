@@ -14,34 +14,22 @@ interface Props {
 
 interface State {
   pages: React.ReactNode[];
-  userName: string;
-  userAge: string;
 }
 
 export default class Welcome extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      pages: [],
-      userName: "",
-      userAge: "20"
-    };
+    this.state = { pages: [] };
   }
 
   componentDidMount() {
     const { onStartButtonClick } = this.props;
-    const { pages, userName, userAge } = this.state;
+    const { pages } = this.state;
 
     pages.push(
       <WelcomePage nextPage={this.nextPage} />,
       <InstuctionsPage nextPage={this.nextPage} />,
-      <UserIntroPage
-        userName={userName}
-        userAge={userAge}
-        handleUserNameChange={this.handleUserNameChange}
-        handleUserAgeChange={this.handleUserAgeChange}
-        onStartButtonClick={onStartButtonClick}
-      />
+      <UserIntroPage onStartButtonClick={onStartButtonClick} />
     );
 
     this.setState({ pages });
@@ -53,14 +41,6 @@ export default class Welcome extends React.Component<Props, State> {
     pages.shift();
 
     this.setState({ pages });
-  };
-
-  handleUserNameChange = (value: string) => {
-    this.setState({ userName: value });
-  };
-
-  handleUserAgeChange = (value: string) => {
-    this.setState({ userAge: value });
   };
 
   public render() {

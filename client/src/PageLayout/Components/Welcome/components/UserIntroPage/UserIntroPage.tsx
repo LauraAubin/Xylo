@@ -7,22 +7,26 @@ import { getRandomInt } from "../../../../../Utilities/Utilities";
 import "../../Welcome.scss";
 
 interface Props {
-  userName: string;
-  userAge: string;
-  handleUserNameChange(value: string): void;
-  handleUserAgeChange(value: string): void;
   onStartButtonClick(uid: string): void;
 }
 
-export default class UserIntroPage extends React.Component<Props> {
+interface State {
+  userName: string;
+  userAge: string;
+}
+
+export default class UserIntroPage extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      userName: "",
+      userAge: "20"
+    };
+  }
+
   public render() {
-    const {
-      userName,
-      userAge,
-      handleUserNameChange,
-      handleUserAgeChange,
-      onStartButtonClick
-    } = this.props;
+    const { onStartButtonClick } = this.props;
+    const { userName, userAge } = this.state;
 
     const date = moment().format("M/D/YY");
     const uid = date + "-" + getRandomInt(100);
@@ -39,13 +43,13 @@ export default class UserIntroPage extends React.Component<Props> {
             <TextField
               label="What's your name?"
               value={userName}
-              onChange={handleUserNameChange}
+              onChange={this.handleUserNameChange}
             />
             <TextField
               label="How old are you?"
               type="number"
               value={userAge}
-              onChange={handleUserAgeChange}
+              onChange={this.handleUserAgeChange}
             />
             <Button primary onClick={onStartButtonClick.bind(this, uid)}>
               Get started
@@ -55,4 +59,12 @@ export default class UserIntroPage extends React.Component<Props> {
       </div>
     );
   }
+
+  handleUserNameChange = (value: string) => {
+    this.setState({ userName: value });
+  };
+
+  handleUserAgeChange = (value: string) => {
+    this.setState({ userAge: value });
+  };
 }
