@@ -5,11 +5,7 @@
 Xylo is a tool to explore how people remember passwords using sound and color. This project is meant for COMP 3008 Human Computer Interaction at Carleton University.
 
 <kbd>
-  <img src="https://github.com/LauraAubin/Xylo/blob/master/Images/Home.png" width="450" height="270" />
-</kbd>
-
-<kbd>
-  <img src="https://github.com/LauraAubin/Xylo/blob/master/Images/Xylophone.png" />
+  <img src="https://github.com/LauraAubin/Xylo/blob/master/Images/Collection.jpg" />
 </kbd>
 
 ## Development
