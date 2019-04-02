@@ -21,4 +21,6 @@ Xylo is a tool to explore how people remember passwords using sound and color. T
 
 **Ignoring local changes to the log file**
 
-- Run `git update-index --assume-unchanged LogFile.txt` in your console to ignore any future changes to `LogFile.txt`.
+- Run `git update-index --assume-unchanged LogFile.csv` in your console to ignore any future changes to `LogFile.csv`.
+- Run `git update-index --no-assume-unchanged LogFile.csv` to undo this action.
+- To get a list of assume unchanged files, run `git ls-files -v|grep '^h'`
