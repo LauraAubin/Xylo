@@ -4,7 +4,7 @@ import autobind from "autobind-decorator";
 import PasswordCreation from "./components/PasswordCreation";
 import PasswordRecall from "./components/PasswordRecall";
 
-import { Card, Frame, Toast } from "@shopify/polaris";
+import { Card, Frame, ProgressBar, Toast } from "@shopify/polaris";
 import { flow } from "./flow";
 
 import "./PssswordWalkthrough.scss";
@@ -108,9 +108,24 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
         </Card>
       );
 
+      const totalSteps = flow(
+        [],
+        []
+      ).length;
+
+      const progressionPercentage = this.calculatePercentage(step, totalSteps);
+
       return (
         <Frame>
-          <div className="CenterElement">{passwordMarkup}</div>
+          <div className="CenterElement">
+            {passwordMarkup}
+            <div className="ProgressBarContainer">
+              <div className="ProgressText">Progress</div>
+              <ProgressBar
+                progress={this.dropDecimals(progressionPercentage)}
+              />
+            </div>
+          </div>
           {showToast && (
             <Toast
               content={toastContent}
@@ -165,5 +180,13 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
   private showToast(toastContent: string, toastError: boolean) {
     this.setState({ toastContent, toastError });
     this.toggleToast();
+  }
+
+  private calculatePercentage(current: number, total: number) {
+    return (current / total) * 100;
+  }
+
+  private dropDecimals(number: number) {
+    return Math.trunc(number);
   }
 }

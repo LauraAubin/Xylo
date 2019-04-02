@@ -1,7 +1,18 @@
 @import "../../../GlobalStyles/spacing.scss";
 @import "../../../GlobalStyles/alignment.scss";
 
+$pageWidth: 350px;
+
 .CardElements {
   margin: spacing(loose);
-  width: 350px;
+  width: $pageWidth;
+}
+
+.ProgressBarContainer {
+  margin-top: spacing(extraLoose);
+  width: $pageWidth + (spacing(loose) * 2);
+}
+
+.ProgressText {
+  margin-bottom: spacing(extraTight);
 }
