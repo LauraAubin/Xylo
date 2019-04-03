@@ -23,6 +23,7 @@ interface Props {
   correctAttempt?(): void;
   badAttempt?(): void;
   showToast(toastContent: string, toastError: boolean): void;
+  logCurrentStep?(event: string): void;
 }
 
 interface State {
@@ -144,22 +145,48 @@ export default class XylophoneContainer extends React.Component<Props, State> {
   }
 
   private evaluateExploredPassword() {
-    const { password, showToast, badAttempt, correctAttempt } = this.props;
+    const { password } = this.props;
     const { keysPressed } = this.state;
 
     const fullPasswordLengthExplored = keysPressed.length === password.length;
 
     if (fullPasswordLengthExplored) {
       if (isEqual(keysPressed, password)) {
-        showToast && showToast("Correct!", false);
-        correctAttempt && correctAttempt();
+        this.correctEntry();
       } else {
-        showToast && showToast("Whoops, not quite right", true);
-        badAttempt && badAttempt();
+        this.badEntry();
       }
 
       this.clearKeysPressed();
       return true;
     }
+  }
+
+  private correctEntry() {
+    const { showToast, correctAttempt, practiceMode } = this.props;
+
+    showToast && showToast("Correct!", false);
+    correctAttempt && correctAttempt();
+    practiceMode && this.logGoodPractice();
+  }
+
+  private badEntry() {
+    const { showToast, badAttempt, practiceMode } = this.props;
+
+    showToast && showToast("Whoops, not quite right", true);
+    badAttempt && badAttempt();
+    practiceMode && this.logFailedPractice();
+  }
+
+  private logGoodPractice() {
+    const { logCurrentStep } = this.props;
+
+    logCurrentStep && logCurrentStep("finish_practice_successful");
+  }
+
+  private logFailedPractice() {
+    const { logCurrentStep } = this.props;
+
+    logCurrentStep && logCurrentStep("finish_practice_failed");
   }
 }
