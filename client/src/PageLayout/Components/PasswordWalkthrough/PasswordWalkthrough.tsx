@@ -8,6 +8,7 @@ import { Card, Frame, ProgressBar, Toast } from "@shopify/polaris";
 import { flow } from "./flow";
 
 import "./PssswordWalkthrough.scss";
+import "./OverwritePolaris.scss";
 
 const PASSWORD_OPTIONS = 12;
 const PASSWORD_LENGTH = 6;
