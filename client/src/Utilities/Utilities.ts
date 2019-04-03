@@ -15,3 +15,5 @@ export function getRandomInt(max: number) {
 export function emptyArray(array: any[]) {
   return array.length === 0;
 }
+
+export function noop() {}
