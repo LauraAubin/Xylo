@@ -197,7 +197,9 @@ export default class XylophoneContainer extends React.Component<Props, State> {
     const { recallMode, logCurrentStep } = this.props;
     const { keysPressed } = this.state;
 
-    if (recallMode && emptyArray(keysPressed)) {
+    const initialKeyEntry = emptyArray(keysPressed);
+
+    if (recallMode && initialKeyEntry) {
       logCurrentStep && logCurrentStep("start_password_entry");
     }
   }
