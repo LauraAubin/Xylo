@@ -3,6 +3,7 @@ import * as React from "react";
 import autobind from "autobind-decorator";
 import PasswordCreation from "./components/PasswordCreation";
 import PasswordRecall from "./components/PasswordRecall";
+import LogFile from "../LogFile";
 
 import { Card, Frame, ProgressBar, Toast } from "@shopify/polaris";
 import { flow } from "./flow";
@@ -21,22 +22,28 @@ const PASSWORD_TYPES = [
   { type: "Phone", color: "red", icon: "notification" }
 ];
 
+interface Props {
+  uid: string;
+}
+
 interface State {
   showModal: boolean;
   createdPasswords: number[][];
   step: number;
+  logCurrentStep: string;
   showToast: boolean;
   toastError: boolean;
   toastContent: string;
 }
 
-export default class PasswordWalkthrough extends React.Component<{}, State> {
-  constructor(state: State) {
-    super(state);
+export default class PasswordWalkthrough extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
     this.state = {
       showModal: false,
       createdPasswords: [],
       step: 0,
+      logCurrentStep: "",
       showToast: false,
       toastError: false,
       toastContent: ""
@@ -48,10 +55,13 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
   }
 
   public render() {
+    const { uid } = this.props;
+
     const {
       showModal,
       createdPasswords,
       step,
+      logCurrentStep,
       showToast,
       toastError,
       toastContent
@@ -90,6 +100,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
                 step={step}
                 passwordStackElements={PASSWORD_TYPES}
                 showToast={this.showToast}
+                logCurrentStep={this.logCurrentStep}
               />
             )}
             {!isCreatingPassword && (
@@ -102,6 +113,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
                 closeModal={this.closeModal}
                 handleModal={this.handleModal}
                 showToast={this.showToast}
+                logCurrentStep={this.logCurrentStep}
               />
             )}
           </div>
@@ -133,6 +145,7 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
               onDismiss={this.toggleToast}
             />
           )}
+          <LogFile newEntry={logCurrentStep} uid={uid} />
         </Frame>
       );
     }
@@ -188,5 +201,10 @@ export default class PasswordWalkthrough extends React.Component<{}, State> {
 
   private dropDecimals(number: number) {
     return Math.trunc(number);
+  }
+
+  @autobind
+  private logCurrentStep(event: string) {
+    this.setState({ logCurrentStep: event });
   }
 }

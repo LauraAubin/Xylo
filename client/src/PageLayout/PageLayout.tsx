@@ -19,12 +19,12 @@ export default class PageLayout extends React.Component<{}, State> {
   };
 
   public render() {
-    const { introduction } = this.state;
+    const { introduction, uid } = this.state;
 
     return introduction ? (
       <Welcome onStartButtonClick={this.startExperiment} />
     ) : (
-      <PasswordWalkthrough />
+      <PasswordWalkthrough uid={uid} />
     );
   }
 }
