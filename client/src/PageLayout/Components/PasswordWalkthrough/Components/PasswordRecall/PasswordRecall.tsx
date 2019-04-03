@@ -41,7 +41,8 @@ export default class PasswordRecall extends React.Component<Props, State> {
       step,
       createElements,
       handleModal,
-      showToast
+      showToast,
+      logCurrentStep,
     } = this.props;
 
     const { attemptsLeft } = this.state;
@@ -74,6 +75,7 @@ export default class PasswordRecall extends React.Component<Props, State> {
             showToast={showToast}
             correctAttempt={this.correctAttempt}
             badAttempt={this.badAttempt}
+            logCurrentStep={logCurrentStep}
             recallMode
           />
         </Modal.Section>
@@ -86,7 +88,7 @@ export default class PasswordRecall extends React.Component<Props, State> {
           step={step}
           elements={elements}
           buttonText="Remember password"
-          onClick={this.handleRememberPasswordButton}
+          onClick={handleModal}
         />
         {modalMarkup}
       </>
@@ -94,20 +96,16 @@ export default class PasswordRecall extends React.Component<Props, State> {
   }
 
   @autobind
-  private handleRememberPasswordButton() {
-    const { handleModal, logCurrentStep } = this.props;
-
-    handleModal();
-    logCurrentStep("start_password_entry");
-  }
-
-  @autobind
   private correctAttempt() {
+    const { logCurrentStep } = this.props;
+
     this.endTurn();
+    logCurrentStep && logCurrentStep("finish_password_entry_successful");
   }
 
   @autobind
   private badAttempt() {
+    const { logCurrentStep } = this.props;
     const { attemptsLeft } = this.state;
 
     if (attemptsLeft === 1) {
@@ -116,6 +114,8 @@ export default class PasswordRecall extends React.Component<Props, State> {
     } else {
       this.setState({ attemptsLeft: attemptsLeft - 1 });
     }
+
+    logCurrentStep && logCurrentStep("finish_password_entry_failed");
   }
 
   private endTurn() {
