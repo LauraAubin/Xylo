@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Button } from "@shopify/polaris";
+import { emptyArray } from "../../../Utilities/Utilities";
 import { isEqual } from "lodash";
 
 import autobind from "autobind-decorator";
@@ -23,7 +24,7 @@ interface Props {
   correctAttempt?(): void;
   badAttempt?(): void;
   showToast(toastContent: string, toastError: boolean): void;
-  logCurrentStep?(event: string): void;
+  logCurrentStep(event: string): void;
 }
 
 interface State {
@@ -107,6 +108,7 @@ export default class XylophoneContainer extends React.Component<Props, State> {
 
   @autobind
   private singlePressedKey(key: number) {
+    this.logStartPasswordEntry();
     this.setState({ pressedKey: key });
   }
 
@@ -188,5 +190,15 @@ export default class XylophoneContainer extends React.Component<Props, State> {
     const { logCurrentStep } = this.props;
 
     logCurrentStep && logCurrentStep("finish_practice_failed");
+  }
+
+  @autobind
+  private logStartPasswordEntry() {
+    const { recallMode, logCurrentStep } = this.props;
+    const { keysPressed } = this.state;
+
+    if (recallMode && emptyArray(keysPressed)) {
+      logCurrentStep && logCurrentStep("start_password_entry");
+    }
   }
 }

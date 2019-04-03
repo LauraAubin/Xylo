@@ -113,6 +113,7 @@ export default class PasswordWalkthrough extends React.Component<Props, State> {
                 closeModal={this.closeModal}
                 handleModal={this.handleModal}
                 showToast={this.showToast}
+                logCurrentStep={this.logCurrentStep}
               />
             )}
           </div>

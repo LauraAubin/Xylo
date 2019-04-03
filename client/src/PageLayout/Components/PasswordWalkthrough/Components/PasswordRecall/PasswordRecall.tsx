@@ -20,6 +20,7 @@ interface Props {
   closeModal(): void;
   handleModal(): void;
   showToast(toastContent: string, toastError: boolean): void;
+  logCurrentStep(event: string): void;
 }
 
 interface State {
@@ -85,11 +86,19 @@ export default class PasswordRecall extends React.Component<Props, State> {
           step={step}
           elements={elements}
           buttonText="Remember password"
-          onClick={handleModal}
+          onClick={this.handleRememberPasswordButton}
         />
         {modalMarkup}
       </>
     );
+  }
+
+  @autobind
+  private handleRememberPasswordButton() {
+    const { handleModal, logCurrentStep } = this.props;
+
+    handleModal();
+    logCurrentStep("start_password_entry");
   }
 
   @autobind
