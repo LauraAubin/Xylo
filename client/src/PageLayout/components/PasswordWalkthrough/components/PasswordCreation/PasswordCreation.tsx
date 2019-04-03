@@ -22,6 +22,7 @@ interface Props {
   closeModal(): void;
   handleModal(): void;
   showToast(toastContent: string, toastError: boolean): void;
+  logCurrentStep(event: string): void;
 }
 
 interface State {
@@ -100,11 +101,19 @@ export default class PasswordCreation extends React.Component<Props, State> {
           step={step}
           elements={passwordStackElements}
           buttonText="Create password"
-          onClick={handleModal}
+          onClick={this.handleCreatePasswordButton}
         />
         {modalMarkup}
       </>
     );
+  }
+
+  @autobind
+  private handleCreatePasswordButton() {
+    const { handleModal, logCurrentStep } = this.props;
+
+    handleModal();
+    logCurrentStep("start_creating_password");
   }
 
   @autobind
