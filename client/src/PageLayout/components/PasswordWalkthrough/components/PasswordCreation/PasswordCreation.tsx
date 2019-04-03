@@ -69,7 +69,7 @@ export default class PasswordCreation extends React.Component<Props, State> {
             </Button>
           </Tooltip>
         </div>
-        <Button primary onClick={closeModal}>
+        <Button primary onClick={this.closeModal}>
           Got it
         </Button>
       </div>
@@ -124,6 +124,14 @@ export default class PasswordCreation extends React.Component<Props, State> {
 
     this.setState({ practiceMode: true });
     logCurrentStep("start_practice");
+  }
+
+  @autobind
+  private closeModal() {
+    const { closeModal, logCurrentStep } = this.props;
+
+    closeModal();
+    logCurrentStep("finish_creating_password");
   }
 
   @autobind
