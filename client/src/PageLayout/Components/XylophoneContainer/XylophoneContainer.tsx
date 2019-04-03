@@ -19,6 +19,7 @@ interface Props {
   numberOfKeys: number;
   password: number[];
   practiceMode?: boolean;
+  hasCompletedPracticeMode?(): void;
   recallMode?: boolean;
   stopPracticing?(): void;
   correctAttempt?(): void;
@@ -181,8 +182,9 @@ export default class XylophoneContainer extends React.Component<Props, State> {
   }
 
   private logGoodPractice() {
-    const { logCurrentStep } = this.props;
+    const { logCurrentStep, hasCompletedPracticeMode } = this.props;
 
+    hasCompletedPracticeMode && hasCompletedPracticeMode();
     logCurrentStep && logCurrentStep("finish_practice_successful");
   }
 

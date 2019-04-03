@@ -27,12 +27,13 @@ interface Props {
 
 interface State {
   practiceMode: boolean;
+  hasCompletedPracticeMode: boolean;
 }
 
 export default class PasswordCreation extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { practiceMode: false };
+    this.state = { practiceMode: false, hasCompletedPracticeMode: false };
   }
 
   componentDidUpdate() {
@@ -52,13 +53,12 @@ export default class PasswordCreation extends React.Component<Props, State> {
       password,
       step,
       passwordStackElements,
-      closeModal,
       handleModal,
       showToast,
       logCurrentStep
     } = this.props;
 
-    const { practiceMode } = this.state;
+    const { practiceMode, hasCompletedPracticeMode } = this.state;
 
     const modalFooter = (
       <div className="ModalFooterArea">
@@ -69,9 +69,15 @@ export default class PasswordCreation extends React.Component<Props, State> {
             </Button>
           </Tooltip>
         </div>
-        <Button primary onClick={this.closeModal}>
-          Got it
-        </Button>
+        <Tooltip content="Complete the practice event before moving forward">
+          <Button
+            primary
+            disabled={practiceMode || !hasCompletedPracticeMode}
+            onClick={this.closeModal}
+          >
+            Got it
+          </Button>
+        </Tooltip>
       </div>
     );
 
@@ -89,6 +95,7 @@ export default class PasswordCreation extends React.Component<Props, State> {
             numberOfKeys={passwordOptions}
             password={password}
             practiceMode={practiceMode}
+            hasCompletedPracticeMode={this.hasCompletedPracticeMode}
             stopPracticing={this.stopPracticing}
             showToast={showToast}
             logCurrentStep={logCurrentStep}
@@ -137,5 +144,10 @@ export default class PasswordCreation extends React.Component<Props, State> {
   @autobind
   private stopPracticing() {
     this.setState({ practiceMode: false });
+  }
+
+  @autobind
+  private hasCompletedPracticeMode() {
+    this.setState({ hasCompletedPracticeMode: true });
   }
 }
