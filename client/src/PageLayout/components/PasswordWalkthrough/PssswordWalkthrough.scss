@@ -8,6 +8,10 @@ $pageWidth: 350px;
   width: $pageWidth;
 }
 
+.EndStateText {
+  padding: spacing();
+}
+
 .ProgressBarContainer {
   margin-top: spacing(extraLoose);
   width: $pageWidth + (spacing(loose) * 2);
