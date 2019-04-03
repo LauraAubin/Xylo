@@ -54,7 +54,8 @@ export default class PasswordCreation extends React.Component<Props, State> {
       passwordStackElements,
       closeModal,
       handleModal,
-      showToast
+      showToast,
+      logCurrentStep
     } = this.props;
 
     const { practiceMode } = this.state;
@@ -90,6 +91,7 @@ export default class PasswordCreation extends React.Component<Props, State> {
             practiceMode={practiceMode}
             stopPracticing={this.stopPracticing}
             showToast={showToast}
+            logCurrentStep={logCurrentStep}
           />
         </Modal.Section>
       </Modal>
@@ -118,7 +120,10 @@ export default class PasswordCreation extends React.Component<Props, State> {
 
   @autobind
   private practiceClicked() {
+    const { logCurrentStep } = this.props;
+
     this.setState({ practiceMode: true });
+    logCurrentStep("start_practice");
   }
 
   @autobind
