@@ -16,7 +16,7 @@ enum Type {
 interface Props {
   showModal: boolean;
   passwordOptions: number;
-  generatedPassword: number[];
+  password: number[];
   step: number;
   passwordStackElements: { type: string; color: string; icon: string }[];
   closeModal(): void;
@@ -49,7 +49,7 @@ export default class PasswordCreation extends React.Component<Props, State> {
     const {
       showModal,
       passwordOptions,
-      generatedPassword,
+      password,
       step,
       passwordStackElements,
       closeModal,
@@ -87,7 +87,7 @@ export default class PasswordCreation extends React.Component<Props, State> {
           <XylophoneContainer
             type={Type.creation}
             numberOfKeys={passwordOptions}
-            password={generatedPassword}
+            password={password}
             practiceMode={practiceMode}
             stopPracticing={this.stopPracticing}
             showToast={showToast}

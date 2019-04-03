@@ -3,9 +3,10 @@ import * as React from "react";
 import autobind from "autobind-decorator";
 import PasswordCreation from "./components/PasswordCreation";
 import PasswordRecall from "./components/PasswordRecall";
+import ProgressBar from "./components/components/ProgressBar";
 import LogFile from "../LogFile";
 
-import { Card, Frame, ProgressBar, Toast } from "@shopify/polaris";
+import { Card, Frame, Toast } from "@shopify/polaris";
 import { flow } from "./flow";
 
 import "./PssswordWalkthrough.scss";
@@ -73,79 +74,77 @@ export default class PasswordWalkthrough extends React.Component<Props, State> {
       SHUFFLED_SEQUENCE
     );
 
+    const toastMarkup = showToast && (
+      <Toast
+        content={toastContent}
+        error={toastError}
+        onDismiss={this.toggleToast}
+      />
+    );
+
     const endOfFlow = step >= flowSteps.length;
 
     if (endOfFlow) {
-      const emptyStateMarkup = (
+      const EndStateMarkup = (
         <div className="CenterElement">
-          <div>Uh oh, something went wrong 🙁</div>
+          <Card title="That's all folks!">
+            <div className="EndStateText">Thanks for participating 😃</div>
+          </Card>
         </div>
       );
 
-      return emptyStateMarkup;
+      return (
+        <Frame>
+          <div className="CenterElement">
+            {EndStateMarkup}
+            <ProgressBar step={step} text="Completed" />
+          </div>
+          {toastMarkup}
+          <LogFile newEntry={logCurrentStep} uid={uid} />
+        </Frame>
+      );
     } else {
       const cardTitle = flowSteps[step].title;
       const data = flowSteps[step].data;
       const isCreatingPassword = flowSteps[step].action.isCreatingPassword;
+
+      const defaultPasswordProps = {
+        step: step,
+        password: data,
+        passwordOptions: PASSWORD_OPTIONS,
+        showModal: showModal,
+        closeModal: this.closeModal,
+        handleModal: this.handleModal,
+        showToast: this.showToast,
+        logCurrentStep: this.logCurrentStep
+      };
 
       const passwordMarkup = (
         <Card title={cardTitle}>
           <div className="CardElements">
             {isCreatingPassword && (
               <PasswordCreation
-                showModal={showModal}
-                passwordOptions={PASSWORD_OPTIONS}
-                generatedPassword={data}
-                closeModal={this.closeModal}
-                handleModal={this.handleModal}
-                step={step}
                 passwordStackElements={PASSWORD_TYPES}
-                showToast={this.showToast}
-                logCurrentStep={this.logCurrentStep}
+                {...defaultPasswordProps}
               />
             )}
             {!isCreatingPassword && (
               <PasswordRecall
-                showModal={showModal}
-                passwordOptions={PASSWORD_OPTIONS}
-                password={data}
-                step={step}
                 createElements={this.createShuffledPasswordTypes}
-                closeModal={this.closeModal}
-                handleModal={this.handleModal}
-                showToast={this.showToast}
-                logCurrentStep={this.logCurrentStep}
+                {...defaultPasswordProps}
               />
             )}
           </div>
         </Card>
       );
 
-      const totalSteps = flow(
-        [],
-        []
-      ).length;
-
-      const progressionPercentage = this.calculatePercentage(step, totalSteps);
-
       return (
         <Frame>
           <div className="CenterElement">
             {passwordMarkup}
-            <div className="ProgressBarContainer">
-              <div className="ProgressText">Progress</div>
-              <ProgressBar
-                progress={this.dropDecimals(progressionPercentage)}
-              />
-            </div>
+            <ProgressBar step={step} />
           </div>
-          {showToast && (
-            <Toast
-              content={toastContent}
-              error={toastError}
-              onDismiss={this.toggleToast}
-            />
-          )}
+          {toastMarkup}
           <LogFile newEntry={logCurrentStep} uid={uid} />
         </Frame>
       );
@@ -194,14 +193,6 @@ export default class PasswordWalkthrough extends React.Component<Props, State> {
   private showToast(toastContent: string, toastError: boolean) {
     this.setState({ toastContent, toastError });
     this.toggleToast();
-  }
-
-  private calculatePercentage(current: number, total: number) {
-    return (current / total) * 100;
-  }
-
-  private dropDecimals(number: number) {
-    return Math.trunc(number);
   }
 
   @autobind
