@@ -28,8 +28,8 @@ export default class UserIntroPage extends React.Component<Props, State> {
     const { onStartButtonClick } = this.props;
     const { userName, userAge } = this.state;
 
-    const date = moment().format("M/D/YY");
-    const uid = date + "-" + getRandomInt(100);
+    const time = moment().format("mmss");
+    const uid = "user-" + time + getRandomInt(100);
 
     return (
       <div className="CenterElements">
