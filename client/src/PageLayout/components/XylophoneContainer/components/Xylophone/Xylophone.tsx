@@ -20,6 +20,7 @@ interface Props {
   pressedKey?: number;
   singlePressedKey?(key: number): void;
   addNewPressedKey?(key: number): void;
+  toggleVisualizationMode?(): void;
 }
 
 interface State {
@@ -151,8 +152,10 @@ export default class Xylophone extends React.Component<Props, State> {
   }
 
   private stopAnimationCycle() {
+    const { toggleVisualizationMode } = this.props;
     const { intervalInstance } = this.state;
 
+    toggleVisualizationMode && toggleVisualizationMode();
     clearInterval(intervalInstance);
 
     this.setState({ animationIterator: 0 });
@@ -168,7 +171,7 @@ export default class Xylophone extends React.Component<Props, State> {
 
     if (type === AnimationType.Full) {
       this.playKeySound(specificKeyValue);
-      this.darkenKey(AnimationActions.Add, specificKeyValue, true)
+      this.darkenKey(AnimationActions.Add, specificKeyValue, true);
     }
   }
 

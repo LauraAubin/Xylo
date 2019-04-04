@@ -27,13 +27,18 @@ interface Props {
 
 interface State {
   practiceMode: boolean;
+  visualizationMode: boolean;
   hasCompletedPracticeMode: boolean;
 }
 
 export default class PasswordCreation extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { practiceMode: false, hasCompletedPracticeMode: false };
+    this.state = {
+      practiceMode: false,
+      visualizationMode: false,
+      hasCompletedPracticeMode: false
+    };
   }
 
   componentDidUpdate() {
@@ -58,13 +63,20 @@ export default class PasswordCreation extends React.Component<Props, State> {
       logCurrentStep
     } = this.props;
 
-    const { practiceMode, hasCompletedPracticeMode } = this.state;
+    const {
+      practiceMode,
+      visualizationMode,
+      hasCompletedPracticeMode
+    } = this.state;
 
     const modalFooter = (
       <div className="ModalFooterArea">
         <div className="PracticeButton">
           <Tooltip content="Try to follow along with the displayed password">
-            <Button disabled={practiceMode} onClick={this.practiceClicked}>
+            <Button
+              disabled={practiceMode || visualizationMode}
+              onClick={this.practiceClicked}
+            >
               Practice
             </Button>
           </Tooltip>
@@ -72,7 +84,9 @@ export default class PasswordCreation extends React.Component<Props, State> {
         <Tooltip content="Complete the practice event before moving forward">
           <Button
             primary
-            disabled={practiceMode || !hasCompletedPracticeMode}
+            disabled={
+              practiceMode || visualizationMode || !hasCompletedPracticeMode
+            }
             onClick={this.closeModal}
           >
             Got it
@@ -99,6 +113,8 @@ export default class PasswordCreation extends React.Component<Props, State> {
             stopPracticing={this.stopPracticing}
             showToast={showToast}
             logCurrentStep={logCurrentStep}
+            visualizationMode={visualizationMode}
+            toggleVisualizationMode={this.toggleVisualizationMode}
           />
         </Modal.Section>
       </Modal>
@@ -149,5 +165,11 @@ export default class PasswordCreation extends React.Component<Props, State> {
   @autobind
   private hasCompletedPracticeMode() {
     this.setState({ hasCompletedPracticeMode: true });
+  }
+
+  @autobind toggleVisualizationMode() {
+    const { visualizationMode } = this.state;
+
+    this.setState({ visualizationMode: !visualizationMode });
   }
 }

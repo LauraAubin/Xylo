@@ -24,8 +24,10 @@ interface Props {
   stopPracticing?(): void;
   correctAttempt?(): void;
   badAttempt?(): void;
+  visualizationMode?: boolean;
   showToast(toastContent: string, toastError: boolean): void;
   logCurrentStep(event: string): void;
+  toggleVisualizationMode?(): void;
 }
 
 interface State {
@@ -64,7 +66,9 @@ export default class XylophoneContainer extends React.Component<Props, State> {
       password,
       type,
       practiceMode,
-      recallMode
+      recallMode,
+      visualizationMode,
+      toggleVisualizationMode
     } = this.props;
     const { pressedKey, repeatPasswordVisualization } = this.state;
 
@@ -79,11 +83,12 @@ export default class XylophoneContainer extends React.Component<Props, State> {
           pressedKey={pressedKey}
           singlePressedKey={this.singlePressedKey}
           addNewPressedKey={this.addNewPressedKey}
+          toggleVisualizationMode={toggleVisualizationMode}
         />
         {type === Type.creation && (
           <Button
             plain
-            disabled={practiceMode}
+            disabled={practiceMode || visualizationMode}
             onClick={this.visualizePassword}
           >
             Play password
@@ -100,7 +105,10 @@ export default class XylophoneContainer extends React.Component<Props, State> {
 
   @autobind
   private visualizePassword() {
+    const { toggleVisualizationMode } = this.props;
     const { repeatPasswordVisualization } = this.state;
+
+    toggleVisualizationMode && toggleVisualizationMode();
 
     this.setState({
       repeatPasswordVisualization: repeatPasswordVisualization + 1
