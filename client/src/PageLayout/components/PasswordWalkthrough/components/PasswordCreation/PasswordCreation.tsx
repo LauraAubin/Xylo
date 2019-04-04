@@ -138,6 +138,7 @@ export default class PasswordCreation extends React.Component<Props, State> {
     const { handleModal, logCurrentStep } = this.props;
 
     handleModal();
+    this.resetPracticeMode();
     logCurrentStep("start_creating_password");
   }
 
@@ -165,6 +166,11 @@ export default class PasswordCreation extends React.Component<Props, State> {
   @autobind
   private hasCompletedPracticeMode() {
     this.setState({ hasCompletedPracticeMode: true });
+  }
+
+  @autobind
+  private resetPracticeMode() {
+    this.setState({ hasCompletedPracticeMode: false });
   }
 
   @autobind toggleVisualizationMode() {

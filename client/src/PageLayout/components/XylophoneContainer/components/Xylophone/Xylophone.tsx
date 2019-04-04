@@ -18,6 +18,7 @@ interface Props {
   practiceMode?: boolean;
   recallMode?: boolean;
   pressedKey?: number;
+  stopAnimationCycle?: number;
   singlePressedKey?(key: number): void;
   addNewPressedKey?(key: number): void;
   toggleVisualizationMode?(): void;
@@ -52,7 +53,11 @@ export default class Xylophone extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { repeatPasswordVisualization, practiceMode } = this.props;
+    const {
+      repeatPasswordVisualization,
+      practiceMode,
+      stopAnimationCycle
+    } = this.props;
 
     if (prevProps.repeatPasswordVisualization !== repeatPasswordVisualization) {
       const animationType = practiceMode
@@ -61,6 +66,10 @@ export default class Xylophone extends React.Component<Props, State> {
 
       this.resetPlayKeySound();
       this.visualizePassword(animationType);
+    }
+
+    if (prevProps.stopAnimationCycle !== stopAnimationCycle) {
+      practiceMode && this.stopAnimationCycle();
     }
   }
 

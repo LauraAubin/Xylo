@@ -35,6 +35,7 @@ interface State {
   pressedKey?: number;
   keysPressed: number[];
   showToast: boolean;
+  stopAnimationCycle: number;
 }
 
 export default class XylophoneContainer extends React.Component<Props, State> {
@@ -45,7 +46,8 @@ export default class XylophoneContainer extends React.Component<Props, State> {
       repeatPasswordVisualization: 0,
       pressedKey: undefined,
       keysPressed: [],
-      showToast: false
+      showToast: false,
+      stopAnimationCycle: 0
     };
   }
 
@@ -70,7 +72,11 @@ export default class XylophoneContainer extends React.Component<Props, State> {
       visualizationMode,
       toggleVisualizationMode
     } = this.props;
-    const { pressedKey, repeatPasswordVisualization } = this.state;
+    const {
+      pressedKey,
+      repeatPasswordVisualization,
+      stopAnimationCycle
+    } = this.state;
 
     return (
       <div className="Center ContainerHeight">
@@ -81,6 +87,7 @@ export default class XylophoneContainer extends React.Component<Props, State> {
           practiceMode={practiceMode}
           recallMode={recallMode}
           pressedKey={pressedKey}
+          stopAnimationCycle={stopAnimationCycle}
           singlePressedKey={this.singlePressedKey}
           addNewPressedKey={this.addNewPressedKey}
           toggleVisualizationMode={toggleVisualizationMode}
@@ -157,11 +164,13 @@ export default class XylophoneContainer extends React.Component<Props, State> {
 
   private evaluateExploredPassword() {
     const { password } = this.props;
-    const { keysPressed } = this.state;
+    const { keysPressed, stopAnimationCycle } = this.state;
 
     const fullPasswordLengthExplored = keysPressed.length === password.length;
 
     if (fullPasswordLengthExplored) {
+      this.setState({ stopAnimationCycle: stopAnimationCycle + 1 });
+
       if (isEqual(keysPressed, password)) {
         this.correctEntry();
       } else {
