@@ -26,6 +26,9 @@ interface Props {
 
 interface State {
   playKeySound?: number;
+  // sounds like key key, that's the joke 😛.
+  // Okay but actually, its the key of the sound component for a changing xylophone key
+  kiki: number;
   animationIterator: number;
   intervalInstance: any;
 }
@@ -47,6 +50,7 @@ export default class Xylophone extends React.Component<Props, State> {
     super(props);
     this.state = {
       playKeySound: undefined,
+      kiki: 0,
       animationIterator: 0,
       intervalInstance: undefined
     };
@@ -74,7 +78,7 @@ export default class Xylophone extends React.Component<Props, State> {
   }
 
   public render() {
-    const { playKeySound } = this.state;
+    const { playKeySound, kiki } = this.state;
 
     return (
       <>
@@ -82,6 +86,7 @@ export default class Xylophone extends React.Component<Props, State> {
         <Sound
           url={`${SOUND_URL}${playKeySound}.mp3`}
           playStatus={Sound.status.PLAYING}
+          key={kiki}
         />
       </>
     );
@@ -117,13 +122,14 @@ export default class Xylophone extends React.Component<Props, State> {
   @autobind
   private pressedKey(key: number) {
     const { recallMode, addNewPressedKey, singlePressedKey } = this.props;
+    const { kiki } = this.state;
 
     return () => {
       if (recallMode) {
         singlePressedKey && singlePressedKey(key);
       }
       addNewPressedKey && addNewPressedKey(key);
-      this.setState({ playKeySound: key });
+      this.setState({ playKeySound: key, kiki: kiki + 1 });
     };
   }
 
@@ -172,9 +178,13 @@ export default class Xylophone extends React.Component<Props, State> {
 
   private addKeyAnimations(type: AnimationType) {
     const { generatedPassword } = this.props;
-    const { animationIterator } = this.state;
+    const { animationIterator, kiki } = this.state;
 
     const specificKeyValue = generatedPassword[animationIterator];
+
+    const duplicateKey =
+      specificKeyValue === generatedPassword[animationIterator - 1];
+    duplicateKey && this.setState({ kiki: kiki + 1 });
 
     this.pulse(AnimationActions.Add, specificKeyValue);
 
